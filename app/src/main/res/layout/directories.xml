@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+
+<!--    android:orientation="vertical">-->
+<!--<androidx.cardview.widget.CardView-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content">-->
+    <LinearLayout
+
+        android:layout_margin="1dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:padding="10dp"
+      >
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:padding="9dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_folder_black_24dp"></ImageView>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:weightSum="1">
+            <TextView
+
+                android:layout_height="match_parent"
+                android:id="@+id/dir_name"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:text="No Downloads"
+                android:textAllCaps="false"
+                android:textColor="#EE000000"
+                android:textSize="13dp"
+                android:textStyle="normal"
+
+               />
+                <ImageView
+                    android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_more_vert_black_24dp">
+
+            </ImageView>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+<!--</androidx.cardview.widget.CardView>-->
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="@color/cardview_dark_background"-->
+<!--      />-->
+
+
+<!--</LinearLayout>-->

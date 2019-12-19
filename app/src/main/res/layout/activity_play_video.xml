@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayoutParent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_black"
+    android:keepScreenOn="true"
+    android:minHeight="@dimen/size_two_hundred"
+    tools:context=".FurtherActivity.PlayJavaVideoActivity">
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:background="@color/color_black"-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/firstli"-->
+
+    <!--        >-->
+    <!--    </androidx.appcompat.widget.Toolbar>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_marginTop="0dp"-->
+    <!--        android:id="@+id/firstli"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        >-->
+
+
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/simpleExoPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:auto_show="true"
+        app:layout_constraintTop_toBottomOf="@+id/tootwa"
+        app:player_layout_id="@layout/customexoplayerview"
+        app:resize_mode="fixed_width"
+        app:surface_type="texture_view"
+        app:use_controller="false"
+        tools:layout_editor_absoluteX="45dp" />
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:foregroundGravity="bottom"
+        app:layout_constraintBottom_toBottomOf="@+id/simpleExoPlayerView"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/img_lockscreen_hide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:padding="16dp"
+            android:src="@drawable/ic_lock_black_24dp"
+            android:visibility="gone">
+
+        </ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/medli"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+    </LinearLayout>
+
+    <com.google.android.exoplayer2.ui.PlaybackControlView
+
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/simpleExoPlayerView"
+        android:background="@android:color/transparent"
+        android:foregroundGravity="bottom"
+        app:controller_layout_id="@layout/likepalyercontrols"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:show_timeout="0" />
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="@dimen/size_forty"
+        android:layout_height="@dimen/size_forty"
+        android:layout_gravity="center"
+        android:background="@drawable/drawable_rounded_transparent_with_stroke"
+        android:padding="@dimen/size_ten"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/tootwa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_black"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/backbtns"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/backtothevack"
+                android:padding="10dp" />
+            <!--            <ImageView-->
+            <!--                -->
+            <!--                android:layout_width="17dp"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:background="@drawable/iconssearch30">-->
+
+            <!--            </ImageView>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/slevidname"
+                    android:layout_width="165dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:text="Video"
+                    android:textColor="@color/color_white"
+                    android:textSize="17dp">
+
+                </TextView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.60"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="3">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingRight="20dp"
+                            android:visibility="gone">
+
+                            <ImageView
+
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@drawable/iconssearch30">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingRight="20dp">
+
+                            <ImageView
+
+
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@drawable/lockicons8folder32">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:background="@drawable/moremenu">
+
+                            </ImageView>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+    <!--        start of gestures-->
+    <LinearLayout
+
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        tools:layout_editor_absoluteY="120dp">
+
+        <LinearLayout
+
+            android:id="@+id/volumeview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.36"
+            android:background="@color/color_transparent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/volprogressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="10%"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verticalSlider" />
+
+            <com.hmomeni.verticalslider.VerticalSlider
+                android:id="@+id/verticalSlider"
+                android:layout_width="60dp"
+                android:layout_height="290dp"
+                android:visibility="invisible"
+                app:vs_cornerRadius="0dp"
+                app:vs_iconHigh="@drawable/ic_volume_up"
+                app:vs_iconLow="@drawable/ic_volume_off"
+                app:vs_iconMedium="@drawable/drawable_volume_selector"
+                app:vs_max="100"
+                app:vs_progress="10" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.30">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/brigtnessview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.32"
+            android:background="@color/color_transparent"
+            android:orientation="vertical"
+
+            >
+
+            <TextView
+                android:id="@+id/brightprogressText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:text="10%"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/verticalSlider" />
+
+            <com.hmomeni.verticalslider.VerticalSlider
+                android:id="@+id/brightverticalSlider"
+                android:layout_width="60dp"
+                android:layout_height="290dp"
+                android:layout_gravity="right"
+                android:visibility="invisible"
+                app:vs_cornerRadius="0dp"
+                app:vs_iconHigh="@drawable/ic_volume_up"
+                app:vs_iconLow="@drawable/ic_volume_off"
+                app:vs_iconMedium="@drawable/drawable_volume_selector"
+                app:vs_max="100"
+                app:vs_progress="10" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <!--    end of gesture layout-->
+    <LinearLayout
+        android:id="@+id/mainli"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tootwa">
+
+        <ImageView
+            android:id="@+id/img_rotate"
+            android:layout_width="@dimen/size_thirty_five"
+            android:layout_height="@dimen/size_thirty_five"
+            android:layout_margin="5dp"
+
+            android:background="@drawable/drawable_rounded_transparent"
+            android:padding="@dimen/size_ten"
+            android:src="@drawable/ic_screen_rotation_black_24dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/mute"
+            android:layout_width="@dimen/size_thirty_five"
+            android:layout_height="@dimen/size_thirty_five"
+            android:layout_margin="4dp"
+            android:background="@drawable/drawable_rounded_transparent"
+            android:padding="@dimen/size_ten"
+            android:src="@drawable/soundmute"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/hideli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/screenshot"
+                android:layout_width="@dimen/size_thirty_five"
+                android:layout_height="@dimen/size_thirty_five"
+                android:layout_margin="5dp"
+
+                android:background="@drawable/drawable_rounded_transparent"
+                android:padding="@dimen/size_ten"
+                android:src="@drawable/screenshot"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/pipmode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+
+                    android:layout_width="@dimen/size_thirty_five"
+                    android:layout_height="@dimen/size_thirty_five"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/drawable_rounded_transparent"
+                    android:padding="@dimen/size_ten"
+                    android:src="@drawable/gopipvec"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Go PIP "
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="7dp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/backplayimg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/size_thirty_five"
+                    android:layout_height="@dimen/size_thirty_five"
+                    android:layout_margin="5dp"
+
+                    android:background="@drawable/drawable_rounded_transparent"
+                    android:padding="@dimen/size_ten"
+                    android:src="@drawable/headphones"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BackGround\nplay "
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="#000"
+                    android:textSize="7dp">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageViewVolume"
+                android:layout_width="@dimen/size_thirty_five"
+                android:layout_height="@dimen/size_thirty_five"
+                android:layout_margin="5dp"
+                android:background="@drawable/drawable_rounded_transparent"
+                android:padding="@dimen/size_ten"
+                android:src="@drawable/drawable_volume_selector"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imghideshow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/drawable_rounded_transparent"
+            android:padding="@dimen/size_ten"
+            android:rotation="90"
+            android:src="@drawable/hideshow"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

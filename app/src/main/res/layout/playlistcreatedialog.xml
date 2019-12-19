@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_margin="4dp"
+            android:layout_marginTop="14dp"
+            android:padding="10dp"
+            android:background="@null"
+            android:hint="playlist name"
+            android:id="@+id/playcreateedt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </EditText>
+
+        <androidx.cardview.widget.CardView
+            android:layout_gravity="bottom"
+            android:layout_margin="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <Button
+            android:background="@android:color/holo_green_light"
+            android:textColor="@color/color_white"
+            android:text="Create"
+            android:id="@+id/createplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </Button>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+</LinearLayout>

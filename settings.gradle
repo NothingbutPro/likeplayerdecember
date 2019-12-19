@@ -1,0 +1,2 @@
+include ':app', ':videomaster', ':custom-video-player-master'
+rootProject.name='LikePlayer'

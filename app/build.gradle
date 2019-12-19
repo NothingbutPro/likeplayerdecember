@@ -1,0 +1,74 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.0"
+
+    defaultConfig {
+
+        applicationId "com.ics.likeplayer"
+        targetSdkVersion 28
+        versionCode 1
+        minSdkVersion 21
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    packagingOptions {
+        exclude 'META-INF/library_release.kotlin_module'
+        exclude 'META-INF/uigesturerecognizer_release.kotlin_module'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    compile(name:'FFmpegAndroid', ext:'aar')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'com.github.florent37:shapeofview:1.4.7'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.1.0'
+    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
+    implementation 'com.github.MindorksOpenSource:screenshot:v0.0.1'
+    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++For gestures++++++++++++++++++++++++++++++
+    implementation 'it.sephiroth.android.library.uigestures:uigesture-recognizer-kotlin:1.2.7'
+//    implementation 'com.github.sephiroth74:AndroidUIGestureRecognizer:v1.2.7'
+    //++++++++++++++++++++++++++++++++++++++++++
+    implementation 'com.github.nisrulz:sensey:1.8.0'
+     implementation 'com.github.marcoscgdev:DialogSheet:2.0.8'
+    implementation 'com.hmomeni.verticalslider:verticalslider:0.2.0'
+    implementation 'com.orhanobut:dialogplus:1.11@aar'
+    //for video player
+//    implementation 'it.sauronsoftware:jave:1.0.2'
+    implementation 'com.google.android.exoplayer:exoplayer:2.7.2'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.5'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.5'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.7.3'
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.7.3'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.5'
+    //
+}

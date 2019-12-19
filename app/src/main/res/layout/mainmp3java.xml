@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FurtherActivity.AllMp3JavaActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appabr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_black"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/backbtns"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/backtothevack"
+                android:padding="10dp"
+                />
+            <!--            <ImageView-->
+            <!--                -->
+            <!--                android:layout_width="17dp"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:background="@drawable/iconssearch30">-->
+
+            <!--            </ImageView>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/sectionvid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:text="Mp3"
+                    android:textColor="@color/color_white"
+                    android:textSize="20dp">
+
+                </TextView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.60"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="3">
+                        <LinearLayout
+                            android:id="@+id/searchmemp3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingRight="20dp"
+                           >
+                            <ImageView
+
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:background="@drawable/iconssearch30">
+
+                            </ImageView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingRight="20dp">
+                            <ImageView
+
+
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:background="@drawable/lockicons8folder32">
+
+                            </ImageView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/moreopt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:background="@drawable/moremenu">
+
+                            </ImageView>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+        <AutoCompleteTextView
+            android:hint="Search the artist work"
+            android:id="@+id/searchsongs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </AutoCompleteTextView>
+    <LinearLayout
+
+        android:padding="4dp"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:id="@+id/mp3only"
+            android:layout_weight="0.50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shape_dot_radius="3dp"
+            app:shape_dot_spacing="2dp"
+            app:shape_edge_position="right|left"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            >
+
+        <LinearLayout
+                android:background="@color/color_black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/color_white"
+                android:text="Mp3 Only"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            </LinearLayout>
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
+        <com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView
+            android:id="@+id/videoonly"
+            android:layout_weight="0.50"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shape_dot_radius="3dp"
+            app:shape_dot_spacing="2dp"
+            app:shape_edge_position="right|left"
+            app:shape_dottedEdgesCutCorner_bottomLeftSize="8dp"
+            app:shape_dottedEdgesCutCorner_bottomRightSize="8dp"
+            >
+            <LinearLayout
+                android:background="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:padding="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/color_white"
+                android:text="AudioasVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            </LinearLayout>
+
+        </com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView>
+
+
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/allmp3eorec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:id="@+id/videoasmp3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+
+</LinearLayout>
