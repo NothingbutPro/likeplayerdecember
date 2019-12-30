@@ -53,13 +53,14 @@ import java.util.concurrent.TimeUnit;
  * Created by kuldeep on 13/02/18.
  */
 
-public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.ViewHolder>  {
+public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.ViewHolder> {
     File file;
     private Context context;
     View view;
     long id;
+
     ArrayList<Database_players_play> database_players_playsdbList = new ArrayList<>();
-    public static  String _Song_name ,_Song_url,_Song_time;
+    public static String _Song_name, _Song_url, _Song_time;
     private ArrayList<AllVideos> pojoClassArrayList;
     DialogPlus dialog;
 
@@ -68,6 +69,7 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
         this.pojoClassArrayList = pojoClassArrayList;
 
     }
+
     @Override
     public MyAllVideosAdpter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -83,13 +85,13 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
 //use one of overloaded setDataSource() functions to set your data source
         retriever.setDataSource(context, Uri.fromFile(file));
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInMillisec = Long.parseLong(time );
+        long timeInMillisec = Long.parseLong(time);
 
         retriever.release();
         Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
         holder.song_name.setText(pojoClassArrayList.get(position).getName());
         holder.vidthm.setImageBitmap(bMap);
-        holder.time.setText( String.format("%d:%d",
+        holder.time.setText(String.format("%d:%d",
                 TimeUnit.MILLISECONDS.toMinutes(timeInMillisec),
                 TimeUnit.MILLISECONDS.toSeconds(timeInMillisec) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeInMillisec))
@@ -98,25 +100,42 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
             @Override
             public void onClick(View v) {
 //                Intent intent = new Intent(v.getContext() , PlayVideoActivity.class);
-                Intent intent = new Intent(v.getContext() , PlayJavaVideoActivity.class);
-                intent.putExtra("vidurl" , ""+pojoClassArrayList.get(position).getPath());
+                Intent intent = new Intent(v.getContext(), PlayJavaVideoActivity.class);
+                intent.putExtra("vidurl", "" + pojoClassArrayList.get(position).getPath());
 //                intent.putExtra("dirpath" , ""+intent.getStringExtra("dirpath"));
-                intent.putExtra("dirpath" , ""+pojoClassArrayList.get(position).getRooDirName());
-                intent.putExtra("slevidname" , ""+pojoClassArrayList.get(position).getName());
+                intent.putExtra("dirpath", "" + pojoClassArrayList.get(position).getRooDirName());
+                intent.putExtra("slevidname", "" + pojoClassArrayList.get(position).getName());
                 v.getContext().startActivity(intent);
-                ((Activity )v.getContext()).finish();
+                ((Activity) v.getContext()).finish();
             }
         });
         holder.videooptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showsitdialog(v ,position,holder);
+                showsitdialog(v, position, holder);
             }
         });
 //        holder.singer_name.setText(pojoClassArrayList.get(position).getSinger_name());
 //        holder.time.setText(pojoClassArrayList.get(position).getTime());
 
     }
+
+    private void directlysendtofav(View v, ViewHolder holder, int position) {
+        File play_file = new File(pojoClassArrayList.get(position).getPath());
+        id = holder.db.insertToFovorite(context, "Favorites", play_file.getParentFile().getAbsolutePath(), play_file.getParentFile().list().toString(), "Favorites");
+        if (id == 0) {
+            Toast.makeText(v.getContext(), "Playlist Name already exist choose another", Toast.LENGTH_SHORT).show();
+        } else {
+
+            holder.db.insertPlaySongTOPLAYLIST(v.getContext(), (int) id, "Favorites", pojoClassArrayList.get(position).getName(), pojoClassArrayList.get(position).getPath(), String.valueOf(pojoClassArrayList.get(position).getLength()));
+            checkforPlaylist(holder, v, position);
+            Toast.makeText(v.getContext(), "Playlist Creation Success", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
+
+
 
     private void showsitdialog(View v, int position, ViewHolder holder) {
         DialogSheet dialogSheet = new DialogSheet(v.getContext());
@@ -147,8 +166,7 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
 
     private void checkforPlaylist(ViewHolder holder, View v, int position) {
         RecyclerView playlistidsrec;
-
-        LinearLayout addplaylist;
+        LinearLayout addplaylist,add_to_fav;
         Allplaylistadapter allplaylistadapter;
         DialogSheet dialogSheet = new DialogSheet(v.getContext());
          dialogSheet.setTitle("Add to playlist")
@@ -164,6 +182,14 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
         playlistidsrec =inflatedView.findViewById(R.id.playlistids);
 
         addplaylist =inflatedView.findViewById(R.id.addplaylist);
+        add_to_fav =inflatedView.findViewById(R.id.add_to_fav);
+        add_to_fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSheet.dismiss();
+                directlysendtofav(v,holder,position );
+            }
+        });
         addplaylist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,7 +305,7 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
 
         TextView song_name,singer_name,time;
         ImageView vidthm,videooptions;
-        private DatabaseHelper db;
+        public DatabaseHelper db;
         public ViewHolder(View view) {
             super(view);
 

@@ -2,6 +2,7 @@ package com.ics.likeplayer.Database.Model;
 
 public class Database_players_play {
     public static final String PLAYLIST_TABLE_NAME = "PlayList";
+    public static final String PLAYLIST_FAVORITES = "Favorites";
     public static final String SONG_TABLE_NAME = "PlayList_Songs";
 
     public static final String SONG_COLUMN_ID = "song_list_id";
@@ -43,6 +44,24 @@ public class Database_players_play {
                     + COLUMN_PLAYLIST_TYPE + " TEXT,"
                     + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
                     + ")";
+    public static final String CREATE_FAVORITE_TABLE =
+            "CREATE TABLE " + PLAYLIST_FAVORITES + "("
+                    +  COLUMN_PLAYLIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COLUMN_PLAYLIST_URL + " TEXT,"
+                    + COLUMN_PLAYLIST_NAME + " VARCHAR,"
+                    + COLUMN_PLAYLIST_NO_OF_SONGS + " INT,"
+                    + COLUMN_PLAYLIST_TYPE + " TEXT,"
+                    + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
+                    + ")";
+//                public static final String CREATE_FAVORITE_TABLE =
+//                    "CREATE TABLE " + PLAYLIST_FAVORITES + "("
+//                    +  COLUMN_PLAYLIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+//                    + COLUMN_PLAYLIST_URL + " TEXT,"
+//                    + COLUMN_PLAYLIST_NAME + " VARCHAR,"
+//                    + COLUMN_PLAYLIST_NO_OF_SONGS + " INT,"
+//                    + COLUMN_PLAYLIST_TYPE + " TEXT,"
+//                    + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
+//                    + ")";
 
 
     // Create table SQL query

@@ -37,6 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // create notes table
         db.execSQL(Database_players_play.CREATE_PLAY_LIST_TABLE);
+        db.execSQL(Database_players_play.CREATE_FAVORITE_TABLE);
         db.execSQL(Database_players_play.CREATE_PLAYLIST_SONG_TABLE);
     }
 
@@ -45,12 +46,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + Database_players_play.PLAYLIST_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Database_players_play.PLAYLIST_FAVORITES);
         db.execSQL("DROP TABLE IF EXISTS " + Database_players_play.SONG_TABLE_NAME);
 
         // Create tables again
         onCreate(db);
     }
-
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Inserting to the Playlist+++++++++++++++++++
     public long insertPlaySong(Context context, int play_list_id, String play_list_name, String song_name, String song_url , String song_time) {
         // get writable database as we want to write data
         Toast.makeText(context, "Play song inserting", Toast.LENGTH_SHORT).show();
@@ -79,7 +81,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return id;
         }
     }
-    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT SONG++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT SONG TO the Favorites++++++++++++++++++++++
+    public long insertPlaySongTOPLAYLIST(Context context, int play_list_id, String play_list_name, String song_name, String song_url , String song_time) {
+        // get writable database as we want to write data
+        Toast.makeText(context, "Play song inserting", Toast.LENGTH_SHORT).show();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id =0;
+        ContentValues values = new ContentValues();
+        // `id` and `timestamp` will be inserted automatically.
+        // no need to add them
+        values.put(Database_players_play.COLUMN_PLAYLIST_ID, play_list_id);
+        values.put(Database_players_play.COLUMN_PLAYLIST_NAME, play_list_name);
+        values.put(Database_players_play.COLUMN_SONGNAME, song_name);
+        values.put(Database_players_play.COLUMN_URL, song_url);
+        values.put(Database_players_play.COLUMN_TIME, song_time);
+//        values.put(Database_players_play.COLUMN_TIME, song_time);
+
+
+        // insert row
+        id = db.insert(Database_players_play.SONG_TABLE_NAME, null, values);
+//        db.close();
+        if(id !=0)
+        {
+            Toast.makeText(context, "not zero id is"+id, Toast.LENGTH_SHORT).show();
+            return  id;
+        }else {
+            Toast.makeText(context, "zero id is"+id, Toast.LENGTH_SHORT).show();
+            return id;
+        }
+    }
+
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //+++++++++++++++++++++++++++++++++++++++INSERT SONG FOR EXISTING++++++++++++++++++++++++++++++++++++
     public long insertintoExistingPlay(Context context, int play_list_id, String play_list_name, String song_name, String song_url , String song_time) {
@@ -176,6 +207,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     }
+    //+++++++++++++++++++++++++++++++++++++++FOR CHECKING FAVORITES+++++++++++++++++++++++++++++++++++
+    public Boolean checkForsonginFAV(int play_list_id,String song_name) {
+        ArrayList<Database_players_play> notes = new ArrayList<>();
+
+        // Select All Query
+
+        String songquery = "SELECT  * FROM " + Database_players_play.SONG_TABLE_NAME + " WHERE "+
+                Database_players_play.COLUMN_PLAYLIST_ID  + " = "+play_list_id +" AND "+Database_players_play.COLUMN_SONGNAME +" ==  \""+ song_name+"\" ";
+        Log.d("SOng query is" , ""+songquery);
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor playlistqueryCursor = db.rawQuery(songquery, null);
+        Log.d("cursor count" , ""+playlistqueryCursor.getCount());
+        if(playlistqueryCursor.getCount() ==0)
+        {
+            return false;
+        }else {
+            return true;
+        }
+
+    }
+
+    //+++++++++++++++++++++++++++++++++++++
 
     //++++++++++++++++++++++++++++++++++++++
     public long insertPlayList(Context context, String play_listname, String play_list_url, String play_list_no_of_songs, String play_list_type) {
@@ -209,6 +262,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             }else {
                 id = db.insert(Database_players_play.PLAYLIST_TABLE_NAME, null, values);
+                // close db connection
+                db.close();
+                return  id;
+            }
+        }
+//        db.close();
+        return id;
+    }
+    //+++++++++++++++++++++++++++++++++++++++++++++TO the Favorites_+++++++++++++++++++++++++
+    public long insertToFovorite(Context context, String play_listname, String play_list_url, String play_list_no_of_songs, String play_list_type) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        long id =0;
+        ContentValues values = new ContentValues();
+        // `id` and `timestamp` will be inserted automatically.
+        // no need to add them
+        values.put(Database_players_play.COLUMN_PLAYLIST_NAME, play_listname);
+        values.put(Database_players_play.COLUMN_PLAYLIST_URL, play_list_url);
+        values.put(Database_players_play.COLUMN_PLAYLIST_NO_OF_SONGS, play_list_no_of_songs);
+        values.put(Database_players_play.COLUMN_PLAYLIST_TYPE, play_list_type);
+        // insert row
+        ArrayList<Database_players_play> database_players_playslist =  getAllNotesPlaylist();
+        if(database_players_playslist.size()==0)
+        {
+            id = db.insert(Database_players_play.PLAYLIST_TABLE_NAME, null, values);
+            // close db connection
+            return  id;
+        }
+        for(int i=0;i<database_players_playslist.size();i++)
+        {
+            if(database_players_playslist.get(i).getPlay_list_name().equals(play_listname))
+            {
+                Toast.makeText(context, "Play list"+database_players_playslist.get(i).getPlay_list_name(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "play_listname"+play_listname, Toast.LENGTH_SHORT).show();
+                // close db connection
+//                    db.close();
+                return  id;
+
+            }else {
+                id = db.insert(Database_players_play.PLAYLIST_FAVORITES, null, values);
                 // close db connection
                 db.close();
                 return  id;
@@ -259,8 +352,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // return notes list
         return notes;
     }
-//+++++++++++++++++++++++++++++++++++
-
+//++++++++++++++++++++++++++++++++++++++++++++++++Check FOr Playlist+++++++++++++++++++++
     public ArrayList<Database_players_play> getAllNotesPlaylist() {
         ArrayList<Database_players_play> notes = new ArrayList<>();
 
@@ -294,12 +386,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (playlistqueryCursor.moveToNext());
         }
 
+        return notes;
+    }
+    //++++++++++++++++++++++++++++++++++++++++FOR FAVORITE PLAYLIST+++++++++++++++++++++++++++++++++++
+    public ArrayList<Database_players_play> getAllNotesFavorites() {
+        ArrayList<Database_players_play> notes = new ArrayList<>();
+
+        // Select All Query
+        String playlistquery = "SELECT  * FROM " + Database_players_play.PLAYLIST_TABLE_NAME + " ORDER BY " +
+                Database_players_play.COLUMN_TIMESTAMP + " DESC";
+        String songquery = "SELECT  * FROM " + Database_players_play.SONG_TABLE_NAME + " ORDER BY " +
+                Database_players_play.COLUMN_TIMESTAMP + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor playlistqueryCursor = db.rawQuery(playlistquery, null);
+
+
+//        Cursor songqueryCursor1 = db.rawQuery(songquery, null);
+
+        // looping through all rows and adding to list
+        if (playlistqueryCursor.moveToFirst()) {
+            do {
+                Database_players_play database_players_play_Playlist = new Database_players_play(
+                        playlistqueryCursor.getInt ( playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_PLAYLIST_ID) )
+                        ,playlistqueryCursor.getString ( playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_PLAYLIST_NAME))
+                        ,playlistqueryCursor.getString(playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_PLAYLIST_TYPE)
+                ),playlistqueryCursor.getString(playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_PLAYLIST_URL)
+                ),playlistqueryCursor.getInt(playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_PLAYLIST_NO_OF_SONGS)
+                ),playlistqueryCursor.getString(playlistqueryCursor.getColumnIndex(Database_players_play.COLUMN_TIMESTAMP)));
+//                note.setId(cursor.getInt(cursor.getColumnIndex(Database_players_play.COLUMN_ID)));
+//                note.setNote(cursor.getString(cursor.getColumnIndex(Database_players_play.COLUMN_SONGNAME)));
+//                note.setTimestamp(cursor.getString(cursor.getColumnIndex(Database_players_play.COLUMN_TIMESTAMP)));
+
+                notes.add(database_players_play_Playlist);
+            } while (playlistqueryCursor.moveToNext());
+        }
+
         // close db connection
 //        db.close();
 
         // return notes list
         return notes;
     }
+    //+++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++For Songs count+++++++++++++++++++++++++
 public int getSongsCount() {
     String countQuery = "SELECT  * FROM " + Database_players_play.SONG_TABLE_NAME;
