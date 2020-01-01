@@ -86,7 +86,6 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
         retriever.setDataSource(context, Uri.fromFile(file));
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         long timeInMillisec = Long.parseLong(time);
-
         retriever.release();
         Bitmap bMap = ThumbnailUtils.createVideoThumbnail(file.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
         holder.song_name.setText(pojoClassArrayList.get(position).getName());
@@ -276,9 +275,9 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
             }
         });
         try {
-            if(holder.db.getAllNotesPlaylist() !=null){
+            if(holder.db.getAllNotesPlaylist() !=null) {
 //                ArrayList<Database_players_play> database_players_playslist = new ArrayList<>();
-                 database_players_playsdbList = holder.db.getAllNotesPlaylist();
+                database_players_playsdbList = holder.db.getAllNotesPlaylist();
                 playlistidsrec.setLayoutManager(new LinearLayoutManager(v.getContext()));
                 PlayListAdapter playListAdapter = new PlayListAdapter(v.getContext(),database_players_playsdbList);
                 playlistidsrec.setAdapter(playListAdapter);
@@ -298,8 +297,6 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
     public int getItemCount()   {
         return pojoClassArrayList.size();
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

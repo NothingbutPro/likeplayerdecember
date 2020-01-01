@@ -393,7 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Database_players_play> notes = new ArrayList<>();
 
         // Select All Query
-        String playlistquery = "SELECT  * FROM " + Database_players_play.PLAYLIST_TABLE_NAME + " ORDER BY " +
+        String playlistquery = "SELECT  * FROM " + Database_players_play.PLAYLIST_FAVORITES + " ORDER BY " +
                 Database_players_play.COLUMN_TIMESTAMP + " DESC";
         String songquery = "SELECT  * FROM " + Database_players_play.SONG_TABLE_NAME + " ORDER BY " +
                 Database_players_play.COLUMN_TIMESTAMP + " DESC";

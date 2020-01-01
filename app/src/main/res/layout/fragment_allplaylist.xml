@@ -52,6 +52,7 @@
     </LinearLayout>
 
  <LinearLayout
+
      android:orientation="horizontal"
      android:layout_width="match_parent"
      android:layout_height="wrap_content">
@@ -61,17 +62,18 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
-        <ImageView
+        <ImageButton
+            android:background="#45AAAAAA"
             android:padding="8dp"
             android:src="@drawable/fav_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-        </ImageView>
+        </ImageButton>
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
-
+            android:background="@color/color_white"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -88,6 +90,7 @@
 
             </TextView>
             <TextView
+                android:id="@+id/fav_count_txt"
                 android:enabled="false"
                 android:layout_marginLeft="10dp"
                 android:text="0 songs"
@@ -117,5 +120,24 @@
     </LinearLayout>
 
  </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/playlist_recs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
 </LinearLayout>

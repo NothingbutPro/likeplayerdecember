@@ -67,10 +67,6 @@ import com.hmomeni.verticalslider.VerticalSlider;
 import com.ics.likeplayer.R;
 import com.ics.likeplayer.ScreenshotManager;
 import java.io.File;
-
-
-;
-
 import static androidx.core.view.ViewCompat.LAYER_TYPE_HARDWARE;
 
 public class PlayJavaVideoActivity extends AppCompatActivity {
