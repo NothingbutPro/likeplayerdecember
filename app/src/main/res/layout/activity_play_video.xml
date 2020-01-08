@@ -416,13 +416,13 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageViewVolume"
+                android:id="@+id/sleep_timer_btn"
                 android:layout_width="@dimen/size_thirty_five"
                 android:layout_height="@dimen/size_thirty_five"
                 android:layout_margin="5dp"
                 android:background="@drawable/drawable_rounded_transparent"
-                android:padding="@dimen/size_ten"
-                android:src="@drawable/drawable_volume_selector"
+                android:padding="6dp"
+                android:src="@drawable/sleep_timer_clock"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>

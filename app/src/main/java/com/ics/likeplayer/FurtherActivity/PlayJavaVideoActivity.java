@@ -1,17 +1,22 @@
 package com.ics.likeplayer.FurtherActivity;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -23,6 +28,7 @@ import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,6 +84,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public LinearLayout mainli;
     public ImageView imghideshow;
     public ImageView screenshot;
+    public ImageView sleep_timer_btn;
     public TextView slevidname;
     public TextView exo_position;
     public TextView exo_duration;
@@ -95,6 +102,8 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public Boolean ScreenLockORNot = false;
     public Context context;
     public ImageView fullthedamn;
+    private static final int SCREEN_OFF_TIME_OUT = 13000;
+    private int mSystemScreenOffTimeOut;
     //+++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++All Controls+++++++++++++++++++++++++++++++++++++++++++++++++
     ImageView ReverseBtn;
@@ -540,6 +549,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         verticalSlider = findViewById(R.id.verticalSlider);
 //        VolumeBtn = findViewById(R.id.exo_);
         BackFastForwardBtn = findViewById(R.id.exo_rew);
+        sleep_timer_btn = findViewById(R.id.sleep_timer_btn);
         exo_duration = findViewById(R.id.exo_duration);
         tootwa = findViewById(R.id.tootwa);
         Img_lockscreen = findViewById(com.ics.likeplayer.R.id.img_lockscreen);
@@ -617,7 +627,32 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                    }
                }
         );
+        //+++++++++++++++++++++++++++++++++++++++++++For Sleep timer++++++++++++++++++++++++++++++++
+        sleep_timer_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, 1000);
+                Dialog dialog = new Dialog(v.getContext());
+                dialog.setCancelable(true);
+                View view = LayoutInflater.from(v.getContext()).inflate(R.layout.sleep_timer_xml, null);
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                Drawable d = new ColorDrawable(Color.BLACK);
+                d.setAlpha(130);
+                dialog.getWindow().setBackgroundDrawable(d);
+                dialog.setContentView(view);
+                ImageView close_btn_timer = dialog.findViewById(R.id.close_btn_timer);
+                close_btn_timer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
 
+        //++++++++++++++++++++++++++++++
         Img_lockscreen_hide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
