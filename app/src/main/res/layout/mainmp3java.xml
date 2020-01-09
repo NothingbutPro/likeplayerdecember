@@ -187,6 +187,11 @@
 
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allmp3eorec"
         android:layout_width="match_parent"
@@ -199,5 +204,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+    <com.google.android.exoplayer2.ui.PlaybackControlView
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:id="@+id/hidemp3controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:foregroundGravity="bottom"
+        app:controller_layout_id="@layout/likebackpalyercontrols"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:show_timeout="0" />
 
 </LinearLayout>

@@ -414,8 +414,12 @@
                 </TextView>
 
             </LinearLayout>
-
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <ImageView
+
                 android:id="@+id/sleep_timer_btn"
                 android:layout_width="@dimen/size_thirty_five"
                 android:layout_height="@dimen/size_thirty_five"
@@ -425,6 +429,23 @@
                 android:src="@drawable/sleep_timer_clock"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/timer_counttxt"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/drawable_rounded_transparent"
+                android:textAlignment="center"
+                android:textColor="@color/color_black"
+                android:text="10:10"
+                android:textSize="12dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp">
+
+            </TextView>
+        </LinearLayout>
         </LinearLayout>
 
         <ImageView

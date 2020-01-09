@@ -1,5 +1,9 @@
 package com.ics.likeplayer.FurtherActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.opengl.Visibility;
@@ -9,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -16,13 +21,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.ics.likeplayer.Adapter.AllMp3Adapters;
 import com.ics.likeplayer.Model.AllVideos;
 import com.ics.likeplayer.R;
@@ -37,10 +53,12 @@ import java.util.stream.Collectors;
 public class AllMp3JavaActivity extends AppCompatActivity {
     private AllMp3Adapters AallMp3Adapters;
     private AllMp3Adapters AallVideotoMp3Adapters;
+    com.google.android.exoplayer2.ui.PlaybackControlView hidemp3controls;
     LinearLayout moreopt;
     AutoCompleteTextView searchsongs;
     com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView videoonly,mp3only;
     private String RootDirname;
+    public  ImageView backplaypause;
     public LinearLayout searchmemp3;
     public  RecyclerView videoasmp3;
     private RecyclerView allmp3eorec;
@@ -49,11 +67,103 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     private ArrayList<AllVideos> AllVideosList = new ArrayList();
     private ArrayList<AllVideos> AllVideosAsMp3List = new ArrayList();
 
+    // Our handler for received Intents. This will be called whenever an Intent
+// with an action named "custom-event-name" is broadcasted.
+    private BroadcastReceiver mMp3BroadcastRecevier = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String mp3datafileurl = intent.getStringExtra("mp3file_url");
+            Log.d("receiver", "Got message: " + mp3datafileurl);
+//            hidemp3controls.setVisibility(View.VISIBLE);
+            prepareExoplayermp3(mp3datafileurl);
+        }
+    };
+    private SimpleExoPlayer simpleExoplayer;
+    private File _videofile;
+    private TextView song_namewa;
+    private TextView backsongname;
+    private boolean ppplaybackState = false;
+
+    private void prepareExoplayermp3(String mp3datafileurl) {
+        simpleExoplayer = ExoPlayerFactory.newSimpleInstance(
+                this,
+               new DefaultRenderersFactory(this),
+               new DefaultTrackSelector(),new DefaultLoadControl()
+        );
+        prepareExoplayer(mp3datafileurl);
+    }
+
+    private void prepareExoplayer(String filepath) {
+        if (hidemp3controls.getVisibility() == View.GONE) {
+            hidemp3controls.setVisibility(View.VISIBLE);
+        } else {
+            hidemp3controls.setVisibility(View.GONE);
+        }
+        _videofile = new File(filepath);
+        Uri uri = Uri.parse(filepath);
+//        MediaSource mediaSource = buildMediaSource(uri);
+        //        MediaSource mediaSource = buildMediaSource(uri);
+        MediaSource mediaSource = buildMediaSource(uri);
+        simpleExoplayer.prepare(mediaSource, true, true);
+        simpleExoplayer.setPlayWhenReady(true);
+        simpleExoplayer.setPlayWhenReady(true);
+        hidemp3controls.setPlayer(simpleExoplayer);
+        song_namewa.setText(_videofile.getName());
+//         currentindex = get.getLongExtra("currentwindow" ,-1);
+//        simpleExoplayer.seekTo(currentindex);
+        backsongname.setText(_videofile.getName());
+        backplaypause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (simpleExoplayer != null) {
+                    if (ppplaybackState) {
+                        simpleExoplayer.setPlayWhenReady(false);
+                        ppplaybackState = false;
+                    } else {
+                        simpleExoplayer.setPlayWhenReady(true);
+                        ppplaybackState = true;
+                    }
+                }
+            }
+        });
+        simpleExoplayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == Player.STATE_BUFFERING) {
+
+                } else if (playbackState == Player.STATE_READY) {
+                    Toast.makeText(AllMp3JavaActivity.this, "Player is ready with ", Toast.LENGTH_LONG).show();
+//
+//                        simpleExoplayer.seekTo(currentindex)
+
+                } else if (playbackState == Player.STATE_ENDED) {
+                    Toast.makeText(
+                            AllMp3JavaActivity.this,
+                            "Your video has been ended",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        });
+    }
+
+    private MediaSource buildMediaSource(Uri uri) {
+        return new ExtractorMediaSource.Factory(
+                new DefaultDataSourceFactory(AllMp3JavaActivity.this, "Exoplayer-local")
+        ).createMediaSource(uri);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.mainmp3java);
         super.onCreate(savedInstanceState);
         RootDirname = getIntent().getStringExtra("dirpath");
+        // Register to receive messages.
+        // We are registering an observer (mMessageReceiver) to receive Intents
+        // with actions named "custom-event-name".
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMp3BroadcastRecevier,
+                new IntentFilter("mp3eventclicked"));
         Setallviews();
         Filtertsongwith("sortatoz");
 
@@ -325,11 +435,16 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     private void Setallviews() {
         allmp3eorec = findViewById(R.id.allmp3eorec);
         moreopt = findViewById(R.id.moreopt);
+        hidemp3controls = findViewById(R.id.hidemp3controls);
+        backsongname = findViewById(R.id.exo_position);
+        backplaypause = findViewById(R.id.backplaypause);
         videoonly = findViewById(R.id.videoonly);
         mp3only = findViewById(R.id.mp3only);
         searchmemp3 = findViewById(R.id.searchmemp3);
+        song_namewa = findViewById(R.id.song_namewa);
         videoasmp3 = findViewById(R.id.videoasmp3);
         searchsongs = findViewById(R.id.searchsongs);
+
         videoonly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -464,5 +579,10 @@ public class AllMp3JavaActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onDestroy() {
+        // Unregister since the activity is about to be closed.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMp3BroadcastRecevier);
+        super.onDestroy();
+    }
 }

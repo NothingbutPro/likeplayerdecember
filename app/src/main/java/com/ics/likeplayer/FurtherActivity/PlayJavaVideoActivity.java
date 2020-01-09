@@ -22,6 +22,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
@@ -92,6 +93,10 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public  File _videofile;
     int currentwindows;
     long currentwindowspositions;
+    //++++++++++++++++++++++++++++FOr timer++++++++++++++++
+    int _1_min;
+    int stopcount;
+    //++++++++++++++++++
     //    private View progressBar;
 //+++++++++++++++++++++++++++++++++For Variables++++++++++++++++++++++++
     public int REQUEST_ID = 1;
@@ -143,8 +148,11 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     LinearLayout volumeview,brigtnessview;
     private com.google.android.exoplayer2.ui.DefaultTimeBar exo_progress;
     private TextView brightprogressText;
+    private TextView timer_counttxt;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++Audio to video change+++++++++++++++++++++++
-    private MediaPlayer mp;
+    CountDownTimer countDownTimersleep =null;
+    private Handler sleepcountHandler;
+    public Runnable sleepcountRunnable;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++
     @Override
@@ -544,6 +552,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         FastForwardBtn = findViewById(R.id.exo_ffwd);
         fullthedamn = findViewById(R.id.fullthedamn);
         brightverticalSlider = findViewById(R.id.brightverticalSlider);
+        timer_counttxt = findViewById(R.id.timer_counttxt);
         RepeatBtn = findViewById(R.id.exo_repeat_toggle);
         RepeatBtn = findViewById(R.id.exo_repeat_toggle);
         verticalSlider = findViewById(R.id.verticalSlider);
@@ -631,24 +640,9 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         sleep_timer_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    SleepTimerWay(v);
 //                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, 1000);
-                Dialog dialog = new Dialog(v.getContext());
-                dialog.setCancelable(true);
-                View view = LayoutInflater.from(v.getContext()).inflate(R.layout.sleep_timer_xml, null);
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                Drawable d = new ColorDrawable(Color.BLACK);
-                d.setAlpha(130);
-                dialog.getWindow().setBackgroundDrawable(d);
-                dialog.setContentView(view);
-                ImageView close_btn_timer = dialog.findViewById(R.id.close_btn_timer);
-                close_btn_timer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+
             }
         });
 
@@ -718,6 +712,232 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
             }
         });
         //++++++++++++++++++++++++++++++++++++fdjg+++++++++++++++++++++++++++++++++
+    }
+
+    private void SleepTimerWay(View v) {
+        Dialog dialog = new Dialog(v.getContext());
+        dialog.setCancelable(true);
+        View view = LayoutInflater.from(v.getContext()).inflate(R.layout.sleep_timer_xml, null);
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Drawable d = new ColorDrawable(Color.BLACK);
+        d.setAlpha(130);
+        dialog.getWindow().setBackgroundDrawable(d);
+        dialog.setContentView(view);
+        ImageView close_btn_timer = dialog.findViewById(R.id.close_btn_timer);
+        TextView _30mins_txt = dialog.findViewById(R.id._30mins);
+        TextView _45mins_txt = dialog.findViewById(R.id._45mins);
+        TextView _60min_txt = dialog.findViewById(R.id._60min);
+        TextView _15min_txt = dialog.findViewById(R.id._15min_txt);
+        TextView offtimer = dialog.findViewById(R.id.offtimer);
+        //+++++++++++++++++++++++++OFF timer++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        offtimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                timer_counttxt.setText("");
+                timer_counttxt.setVisibility(View.GONE);
+                sleep_timer_btn.setVisibility(View.VISIBLE);
+                try {
+                    countDownTimersleep.cancel();
+                    timer_counttxt.setText("");
+//                    countDownTimersleep=null;
+                }catch (Exception e)
+                {
+                    Toast.makeText(PlayJavaVideoActivity.this, "timer is not set", Toast.LENGTH_SHORT).show();
+                    timer_counttxt.setText("");
+                    countDownTimersleep=null;
+                    e.printStackTrace();
+                }
+            }
+        });
+        //++++++++++++++++++++++++++++++For 15 mins++++++++++++++++++++++++++++++++++++++
+        _15min_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int __15_15min =  Integer.valueOf(1 * 60*1000);
+                _1_min = 60;
+                sleep_timer_btn.setVisibility(View.GONE);
+                timer_counttxt.setVisibility(View.VISIBLE);
+                dialog.dismiss();
+                HandlerTimerWithHandler(v ,__15_15min ,_1_min ,countDownTimersleep);
+
+            }
+        });
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++30 mins++++++++++++++++++++++
+
+        _30mins_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int __15_15min =  Integer.valueOf(30 * 60*1000);
+                _1_min = 60;
+                dialog.dismiss();
+                HandlerTimerWithHandler(v ,__15_15min ,_1_min ,countDownTimersleep);
+
+            }
+
+        });
+
+        //+++++++++++++++++++++++++++++++++++++++++++For 45 min+++++++++++++++++++++++++++
+        _45mins_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int __15_15min =  Integer.valueOf(45 * 60*1000);
+                _1_min = 60;
+                sleep_timer_btn.setVisibility(View.GONE);
+                timer_counttxt.setVisibility(View.VISIBLE);
+//                try{
+//                    countDownTimersleep.cancel();
+////                    countDownTimersleep=null;
+//                    timer_counttxt.setText("");
+//                }catch (Exception e)
+//                {
+//                    Toast.makeText(PlayJavaVideoActivity.this, "This is first", Toast.LENGTH_SHORT).show();
+//                    timer_counttxt.setText("");
+//                    countDownTimersleep=null;
+//
+//                }
+//                countDownTimersleep =  new CountDownTimer(__15_15min, 1000) {
+//
+//                    public void onTick(long millisUntilFinished) {
+//                        if(_1_min ==0)
+//                        {
+//                            _1_min = 60;
+//                        }
+//                        timer_counttxt.setText(String.valueOf(String.valueOf((millisUntilFinished  /60 )/1000)+":"+ _1_min--));
+//                        timer_counttxt.setTextColor(Color.GREEN);
+//                        //here you can have your logic to set text to edittext
+//                        dialog.dismiss();
+//                    }
+//
+//                    public void onFinish() {
+//                        sleep_timer_btn.setVisibility(View.VISIBLE);
+//                        timer_counttxt.setVisibility(View.GONE);
+//                        simpleExoplayer.setPlayWhenReady(false);
+//                    }
+//
+//                }.start();
+                dialog.dismiss();
+                HandlerTimerWithHandler(v ,__15_15min ,_1_min ,countDownTimersleep);
+            }
+        });
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++60 min++++++++
+        _60min_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int __15_15min =  Integer.valueOf(60 * 60*1000);
+                _1_min = 60;
+                sleep_timer_btn.setVisibility(View.GONE);
+                timer_counttxt.setVisibility(View.VISIBLE);
+//                try{
+//                    countDownTimersleep.cancel();
+//                    timer_counttxt.setText("");
+//                    Toast.makeText(PlayJavaVideoActivity.this, "timer is not caceled", Toast.LENGTH_SHORT).show();
+////                    countDownTimersleep=null;
+//                }catch (Exception e)
+//                {
+//                    Toast.makeText(PlayJavaVideoActivity.this, "This is first", Toast.LENGTH_SHORT).show();
+//                    timer_counttxt.setText("");
+//                    countDownTimersleep=null;
+////                    countDownTimersleep.notify();
+//                }
+//                countDownTimersleep =  new CountDownTimer(__15_15min, 1000) {
+//
+//                    public void onTick(long millisUntilFinished) {
+//                        if(_1_min ==0)
+//                        {
+//                            _1_min = 60;
+//                        }
+//                        timer_counttxt.setText(String.valueOf(String.valueOf((millisUntilFinished  /60 )/1000)+":"+ _1_min--));
+//                        timer_counttxt.setTextColor(Color.GREEN);
+//                        //here you can have your logic to set text to edittext
+//                        dialog.dismiss();
+//                    }
+//
+//                    public void onFinish() {
+//                        sleep_timer_btn.setVisibility(View.VISIBLE);
+//                        timer_counttxt.setVisibility(View.GONE);
+//                        simpleExoplayer.setPlayWhenReady(false);
+//                    }
+//
+//                }.start();
+                dialog.dismiss();
+                HandlerTimerWithHandler(v ,__15_15min ,_1_min ,countDownTimersleep);
+            }
+        });
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        timer_counttxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(PlayJavaVideoActivity.this, "timer clicked", Toast.LENGTH_SHORT).show();
+                SleepTimerWay(v);
+//                Dialog dialog = new Dialog(v.getContext());
+//                dialog.setCancelable(true);
+//                View view = LayoutInflater.from(v.getContext()).inflate(R.layout.sleep_timer_xml, null);
+////                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+////                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                Drawable d = new ColorDrawable(Color.BLACK);
+//                d.setAlpha(130);
+//                dialog.getWindow().setBackgroundDrawable(d);
+//                dialog.setContentView(view);
+//                ImageView close_btn_timer = dialog.findViewById(R.id.close_btn_timer);
+//                TextView _15min_txt = dialog.findViewById(R.id._15min_txt);
+//                dialog.show();
+            }
+        });
+
+        close_btn_timer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void HandlerTimerWithHandler(View v, int __15_15min, int _1_min, CountDownTimer countDownTimersleeps) {
+//        sleepcountHandler  = new Handler();
+//        sleepcountRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                sleepcountHandler.postDelayed(this, 1000);
+//            }
+//        };
+//        sleepcountHandler.postDelayed(r, 1000);
+
+        try{
+            countDownTimersleep.cancel();
+            countDownTimersleep =null;
+//                    countDownTimersleep=null;
+            timer_counttxt.setText("");
+        }catch (Exception e)
+        {
+            Toast.makeText(PlayJavaVideoActivity.this, "This is first", Toast.LENGTH_SHORT).show();
+            timer_counttxt.setText("");
+//            countDownTimersleeps =null;
+        }
+        countDownTimersleep =  new CountDownTimer(__15_15min, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                if(PlayJavaVideoActivity.this._1_min ==0)
+                {
+                    PlayJavaVideoActivity.this._1_min = 60;
+                }
+                timer_counttxt.setText(String.valueOf(String.valueOf((millisUntilFinished  /60 )/1000)+":"+ PlayJavaVideoActivity.this._1_min--));
+                timer_counttxt.setTextColor(Color.GREEN);
+                //here you can have your logic to set text to edittext
+
+            }
+
+            public void onFinish() {
+                sleep_timer_btn.setVisibility(View.VISIBLE);
+                timer_counttxt.setVisibility(View.GONE);
+                simpleExoplayer.setPlayWhenReady(false);
+            }
+
+        };
+        countDownTimersleep.start();
     }
 
     private void takeScreenshot(PlayerView vidview) {

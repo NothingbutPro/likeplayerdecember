@@ -7,12 +7,14 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ics.likeplayer.FurtherActivity.AllMp3Activities;
@@ -29,6 +31,7 @@ public class AllMp3Adapters extends RecyclerView.Adapter<AllMp3Adapters.ViewHold
     File file;
     private Context context;
     private ArrayList<AllVideos> pojoClassArrayList;
+
 
     public AllMp3Adapters(Context context, ArrayList<AllVideos> pojoClassArrayList) {
         this.context = context;
@@ -63,10 +66,14 @@ public class AllMp3Adapters extends RecyclerView.Adapter<AllMp3Adapters.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext() , PlayMp3VideoActivity.class);
-                intent.putExtra("mp3url" , ""+pojoClassArrayList.get(position).getPath());
-                v.getContext().startActivity(intent);
-
+//                Intent intent = new Intent(v.getContext() , PlayMp3VideoActivity.class);
+//                intent.putExtra("mp3url" , ""+pojoClassArrayList.get(position).getPath());
+//                v.getContext().startActivity(intent);
+                Log.d("sender", "Broadcasting message");
+                Intent intent = new Intent("mp3eventclicked");
+                // You can also include some extra data.
+                intent.putExtra("mp3file_url", pojoClassArrayList.get(position).getPath());
+                LocalBroadcastManager.getInstance(v.getContext()).sendBroadcast(intent);
             }
         });
     }
@@ -92,4 +99,5 @@ public class AllMp3Adapters extends RecyclerView.Adapter<AllMp3Adapters.ViewHold
 
         }
     }
+
 }
