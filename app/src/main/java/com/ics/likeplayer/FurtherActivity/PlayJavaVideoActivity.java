@@ -592,10 +592,16 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                     ContentResolver cResolver = PlayJavaVideoActivity.this.getApplicationContext().getContentResolver();
                     Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, (int) 0);
                     brightnesscount =1;
+//                    Drawable drawable = new (R.drawable.nightmodeoff);
+//                    nightmodeimg.setBackgroundResource(R.drawable.nightmodeoff);
+                    nightmodeimg.setImageDrawable(getResources().getDrawable(R.drawable.nightmodeoff));
+//                    nightmodeimg.setBackground(R.drawable.dialog_sheet_main_background);
                 }else {
                     Toast.makeText(context, "Night mode off", Toast.LENGTH_SHORT).show();
                     ContentResolver cResolver = PlayJavaVideoActivity.this.getApplicationContext().getContentResolver();
                     Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, (int) 255);
+//                    Drawable drawable = new ColorDrawable(R.drawable.nightmode);
+                    nightmodeimg.setImageDrawable(getResources().getDrawable(R.drawable.nightmode));
                     brightnesscount =0;
                 }
 //                if(brightness < 0) {
