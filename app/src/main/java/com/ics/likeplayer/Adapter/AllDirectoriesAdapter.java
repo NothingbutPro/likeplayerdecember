@@ -48,7 +48,7 @@ public class AllDirectoriesAdapter extends RecyclerView.Adapter<AllDirectoriesAd
                 intent.putExtra("sectionvid" , ""+pojoClassArrayList.get(position).getName());
                 intent.putExtra("nofsongs" , ""+pojoClassArrayList.get(position).getNo_of_SOngs());
                 v.getContext().startActivity(intent);
-                ((Activity)context).finish();
+//                ((Activity)context).finish();
                 Log.e("aleardy " , "called");
             }
         });

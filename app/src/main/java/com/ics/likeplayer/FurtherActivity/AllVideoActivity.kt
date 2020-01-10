@@ -185,7 +185,7 @@ class AllVideoActivity : AppCompatActivity() {
     override fun onBackPressed() {
          intent = Intent(this , MainActivity::class.java)
         startActivity(intent)
-        this.finish()
+//        this.finish()
         super.onBackPressed()
     }
 

@@ -105,7 +105,7 @@ public class MyAllVideosAdpter extends RecyclerView.Adapter<MyAllVideosAdpter.Vi
                 intent.putExtra("dirpath", "" + pojoClassArrayList.get(position).getRooDirName());
                 intent.putExtra("slevidname", "" + pojoClassArrayList.get(position).getName());
                 v.getContext().startActivity(intent);
-                ((Activity) v.getContext()).finish();
+//                ((Activity) v.getContext()).finish();
             }
         });
         holder.videooptions.setOnClickListener(new View.OnClickListener() {

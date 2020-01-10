@@ -56,6 +56,7 @@ public class Mp3OnlyAdapter extends RecyclerView.Adapter<Mp3OnlyAdapter.ViewHold
             public void onClick(View v) {
 //                Intent intent = new Intent(v.getContext(), AllMp3Activities.class);
                 Intent intent = new Intent(v.getContext(), AllMp3JavaActivity.class);
+                intent.putExtra("hi" , pojoClassArrayList.toArray());
                 intent.putExtra("dirpath", "" + pojoClassArrayList.get(position).getBaseAddress());
                 intent.putExtra("nofsongs", "" + pojoClassArrayList.get(position).getNo_of_SOngs());
                 v.getContext().startActivity(intent);

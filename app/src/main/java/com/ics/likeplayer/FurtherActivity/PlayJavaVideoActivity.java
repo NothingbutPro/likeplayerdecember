@@ -95,7 +95,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     long currentwindowspositions;
     //++++++++++++++++++++++++++++FOr timer++++++++++++++++
     int _1_min;
-    int stopcount;
+    int brightnesscount = 0;
     //++++++++++++++++++
     //    private View progressBar;
 //+++++++++++++++++++++++++++++++++For Variables++++++++++++++++++++++++
@@ -112,6 +112,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     //+++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++All Controls+++++++++++++++++++++++++++++++++++++++++++++++++
     ImageView ReverseBtn;
+    ImageView nightmodeimg;
     ImageView NextBtn;
     ImageView FastForwardBtn;
     ImageView BackFastForwardBtn;
@@ -151,8 +152,6 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     private TextView timer_counttxt;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++Audio to video change+++++++++++++++++++++++
     CountDownTimer countDownTimersleep =null;
-    private Handler sleepcountHandler;
-    public Runnable sleepcountRunnable;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++++++
     @Override
@@ -181,7 +180,17 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         InitializeEverything();
         InitializePlayer();
         InitializePlayerControls();
-
+        imghideshow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hideli.getVisibility() == View.VISIBLE)
+                {
+                    hideli.setVisibility(View.GONE);
+            }else {
+                    hideli.setVisibility(View.VISIBLE );
+                }
+            }
+        });
         simpleExoplayer.addListener(new Player.DefaultEventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
@@ -284,7 +293,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                 startActivity(intent);
                 simpleExoplayer.stop();
                 simpleExoplayer.release();
-                finish();
+//                finish();
 
 //            AudioExtractor.Companion.with(v.getContext()).setFile(_videofile)//video FIle
 //                .setOutputFileName(sx)
@@ -548,6 +557,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         PlaynPauseBTn = findViewById(com.ics.likeplayer.R.id.playnpause);
 //        PlaynPauseBTn = findViewById(R.id.playnpause);
         ReverseBtn = findViewById(R.id.exo_prev);
+        nightmodeimg = findViewById(R.id.nightmodeimg);
         NextBtn = findViewById(R.id.exo_next);
         FastForwardBtn = findViewById(R.id.exo_ffwd);
         fullthedamn = findViewById(R.id.fullthedamn);
@@ -572,6 +582,32 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         exo_position = findViewById(R.id.exo_position);
         // get the gesture detector
         //++++++++++++++++++++++++++++++++++++++++++++++++MAin Functions+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        nightmodeimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Working mode on", Toast.LENGTH_SHORT).show();
+                //constrain the value of brightness
+                if(brightnesscount ==0)
+                {
+                    ContentResolver cResolver = PlayJavaVideoActivity.this.getApplicationContext().getContentResolver();
+                    Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, (int) 0);
+                    brightnesscount =1;
+                }else {
+                    Toast.makeText(context, "Night mode off", Toast.LENGTH_SHORT).show();
+                    ContentResolver cResolver = PlayJavaVideoActivity.this.getApplicationContext().getContentResolver();
+                    Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, (int) 255);
+                    brightnesscount =0;
+                }
+//                if(brightness < 0) {
+//                    brightness = 0;
+//                    Toast.makeText(context, "Night mode on", Toast.LENGTH_SHORT).show();
+//                }
+//                else if(brightness > 255) {
+//
+//                    brightness = 255;
+//                }
+            }
+        });
         PlaynPauseBTn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
