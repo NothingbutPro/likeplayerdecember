@@ -1,8 +1,5 @@
 package com.ics.likeplayer.FurtherActivity;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -91,8 +88,11 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public TextView exo_duration;
     public LinearLayout backplayimg;
     public  File _videofile;
+    //+++++++++++++++++++++++++++++++++++++++Windows postions for player for repeat and back play+++++++++++++
     int currentwindows;
     long currentwindowspositions;
+    long positionneedrepeat;
+    //+++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++FOr timer++++++++++++++++
     int _1_min;
     int brightnesscount = 0;
@@ -107,12 +107,10 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public Boolean ScreenLockORNot = false;
     public Context context;
     public ImageView fullthedamn;
-    private static final int SCREEN_OFF_TIME_OUT = 13000;
-    private int mSystemScreenOffTimeOut;
-    //+++++++++++++++++++++++++++++++++++++++++++++++
+
 //+++++++++++++++++++++++++++++++++++++++All Controls+++++++++++++++++++++++++++++++++++++++++++++++++
     ImageView ReverseBtn;
-    ImageView nightmodeimg;
+    ImageView nightmodeimg,abrepeatimg;
     ImageView NextBtn;
     ImageView FastForwardBtn;
     ImageView BackFastForwardBtn;
@@ -282,7 +280,6 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String sx = _videofile.getAbsolutePath();
-
                 Intent intent = new Intent(v.getContext() ,AllVideoActivity.class);
                 intent.putExtra("filepath" , sx);
                 intent.putExtra("dirpath" , getIntent().getStringExtra("dirpath"));
@@ -558,6 +555,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 //        PlaynPauseBTn = findViewById(R.id.playnpause);
         ReverseBtn = findViewById(R.id.exo_prev);
         nightmodeimg = findViewById(R.id.nightmodeimg);
+        abrepeatimg = findViewById(R.id.abrepeatimg);
         NextBtn = findViewById(R.id.exo_next);
         FastForwardBtn = findViewById(R.id.exo_ffwd);
         fullthedamn = findViewById(R.id.fullthedamn);
@@ -582,6 +580,29 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         exo_position = findViewById(R.id.exo_position);
         // get the gesture detector
         //++++++++++++++++++++++++++++++++++++++++++++++++MAin Functions+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //++++++++++++++++++++++++++++++++++++++++++++FOR AUTO REPEAT+++++++++++++++++++++++++++++++
+        abrepeatimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//             currentwindowspositions=  simpleExoplayer.getCurrentPosition();
+                final Dialog dialog = new Dialog(v.getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.seektorangedialog);
+
+
+//                Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
+//                dialogButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+
+                dialog.show();
+            }
+        });
+        //+++++++++++++++++++++++++++++++++++++++
         nightmodeimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
