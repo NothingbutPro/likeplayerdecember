@@ -158,7 +158,7 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.mainmp3java);
         super.onCreate(savedInstanceState);
-//        RootDirname = getIntent().getStringExtra("dirpath");
+        RootDirname = getIntent().getStringExtra("dirpath");
 //        String name = getIntent().getParcelableArrayListExtra("hi");
         // Register to receive messages.
         // We are registering an observer (mMessageReceiver) to receive Intents

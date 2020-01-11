@@ -1,6 +1,7 @@
 package com.ics.likeplayer.Model;
-
-public class DIrectories_Mp3_Folders {
+// import com.example.Foo.Bar.Baz;
+import java.io.Serializable;
+public class DIrectories_Mp3_Folders implements Serializable {
     String Name;
     String BaseAddress;
     String No_of_SOngs;

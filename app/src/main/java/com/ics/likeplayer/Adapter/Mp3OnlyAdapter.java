@@ -59,7 +59,8 @@ public class Mp3OnlyAdapter extends RecyclerView.Adapter<Mp3OnlyAdapter.ViewHold
                 intent.putExtra("hi" , pojoClassArrayList.toArray());
                 intent.putExtra("dirpath", "" + pojoClassArrayList.get(position).getBaseAddress());
                 intent.putExtra("nofsongs", "" + pojoClassArrayList.get(position).getNo_of_SOngs());
-                v.getContext().startActivity(intent);
+//                v.getContext().startActivity(intent);
+                context.startActivity(intent);
             }
         });
 //        holder.singer_name.setText(pojoClassArrayList.get(position).getSinger_name());

@@ -33,6 +33,7 @@ class DashboardFragment : Fragment() {
     private var Mp3OnlyAdapter: Mp3OnlyAdapter? = null
     private lateinit var mp3rect: RecyclerView
     var No_of_Songs: Int =0
+    var DIrnames: String = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,8 +74,14 @@ class DashboardFragment : Fragment() {
                     val path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
                     val DIrname = File(path).parentFile.name
                     val DIrAddress = File(path).parentFile.absolutePath
-                    val DIrSOngs = File(path).parentFile.list()
-                    p  = cursor.position;
+                    val DIrSOngs = File(path).parentFile.listFiles()
+                     p  = cursor.position;
+                    if (DIrnames.equals(DIrSOngs.get(0).parentFile.name)) {
+                        p = cursor.position;
+                    } else {
+                        p = 0;
+                        DIrnames = DIrname
+                    }
 //                    DIrnames =DIrname
 //                    paths =path
 //                    DIrAddresss =DIrAddress

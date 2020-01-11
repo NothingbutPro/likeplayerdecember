@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -587,18 +588,17 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 //             currentwindowspositions=  simpleExoplayer.getCurrentPosition();
                 final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.seektorangedialog);
+                dialog.setCancelable(true);
+//                dialog.setContentView(R.layout.seektorangedialog);
+                View view = LayoutInflater.from(v.getContext()).inflate(R.layout.seektorangedialog, null);
+                Drawable d = new ColorDrawable(Color.BLACK);
+                d.setAlpha(130);
 
-
-//                Button dialogButton = (Button) dialog.findViewById(R.id.btn_dialog);
-//                dialogButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-
+                // Setting dialogview
+                Window window = dialog.getWindow();
+                window.setGravity(Gravity.RIGHT);
+                dialog.getWindow().setBackgroundDrawable(d);
+                dialog.setContentView(view);
                 dialog.show();
             }
         });
