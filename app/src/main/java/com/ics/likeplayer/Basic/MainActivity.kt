@@ -1,4 +1,4 @@
-package com.ics.likeplayer
+package com.ics.likeplayer.Basic
 
 import android.content.ContentResolver
 import android.content.Intent
@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ics.likeplayer.FurtherActivity.Searchwhatactivity
+import com.ics.likeplayer.R
 
 class MainActivity : AppCompatActivity() {
     private var cResolver: ContentResolver? = null

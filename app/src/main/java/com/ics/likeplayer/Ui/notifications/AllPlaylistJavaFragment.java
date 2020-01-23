@@ -1,8 +1,10 @@
 package com.ics.likeplayer.Ui.notifications;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ics.likeplayer.Adapter.PlayListAdapter;
+import com.ics.likeplayer.Adapter.PlaylistFragemtnAdapter;
 import com.ics.likeplayer.Database.DatabaseHelper;
 import com.ics.likeplayer.Database.Model.Database_players_play;
+import com.ics.likeplayer.FurtherActivity.PlalyistViews.AllPlayListViewActivity;
 import com.ics.likeplayer.R;
 
 import java.util.ArrayList;
@@ -25,7 +29,7 @@ public class AllPlaylistJavaFragment extends Fragment {
     public DatabaseHelper db;
     ArrayList<Database_players_play> database_players_playArrayList = new ArrayList<>();
     ArrayList<Database_players_play> database_favorites_players_playArrayList = new ArrayList<>();
-
+    LinearLayout myfavliplaylist;
     public AllPlaylistJavaFragment() {
         super();
     }
@@ -36,7 +40,20 @@ public class AllPlaylistJavaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_allplaylist ,container,false);
         playlist_recs = view.findViewById(R.id.playlist_recs);
         fav_count_txt = view.findViewById(R.id.fav_count_txt);
+        myfavliplaylist = view.findViewById(R.id.myfavliplaylist);
+
         db = new DatabaseHelper(getActivity());
+        myfavliplaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(v.getContext() , AllPlayListViewActivity.class);
+                intent.putExtra("play_name" ,"Favorites" );
+                intent.putExtra("play_type" ,"fav");
+                startActivity(intent);
+
+            }
+        });
+        database_players_playArrayList.clear();
        if( (database_players_playArrayList = db.getAllNotesPlaylist() ).size() !=0)
        {
            for (int i = 0; i < database_players_playArrayList.size(); i++)
@@ -49,7 +66,7 @@ public class AllPlaylistJavaFragment extends Fragment {
            }
            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
            linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-           PlayListAdapter playListAdapter = new PlayListAdapter(getActivity(),database_players_playArrayList);
+           PlaylistFragemtnAdapter playListAdapter = new PlaylistFragemtnAdapter(getActivity(),database_players_playArrayList);
            playlist_recs.setLayoutManager(linearLayoutManager);
            playlist_recs.setAdapter(playListAdapter);
        }else {

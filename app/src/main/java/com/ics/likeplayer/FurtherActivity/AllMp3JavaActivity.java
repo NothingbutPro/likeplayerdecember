@@ -54,6 +54,7 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     private AllMp3Adapters AallMp3Adapters;
     private AllMp3Adapters AallVideotoMp3Adapters;
     com.google.android.exoplayer2.ui.PlaybackControlView hidemp3controls;
+    ImageView cancelback;
     LinearLayout moreopt;
     AutoCompleteTextView searchsongs;
     com.github.florent37.shapeofview.shapes.DottedEdgesCutCornerView videoonly,mp3only;
@@ -64,6 +65,7 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     private RecyclerView allmp3eorec;
     public ArrayList<AllVideos> CustomList = new ArrayList<>();
     private File File;
+
     private ArrayList<AllVideos> AllVideosList = new ArrayList();
     private ArrayList<AllVideos> AllVideosAsMp3List = new ArrayList();
 
@@ -76,7 +78,16 @@ public class AllMp3JavaActivity extends AppCompatActivity {
             String mp3datafileurl = intent.getStringExtra("mp3file_url");
             Log.d("receiver", "Got message: " + mp3datafileurl);
 //            hidemp3controls.setVisibility(View.VISIBLE);
+            try {
+                simpleExoplayer.stop();
+                simpleExoplayer.release();
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
             prepareExoplayermp3(mp3datafileurl);
+
         }
     };
     private SimpleExoPlayer simpleExoplayer;
@@ -95,6 +106,7 @@ public class AllMp3JavaActivity extends AppCompatActivity {
     }
 
     private void prepareExoplayer(String filepath) {
+
         if (hidemp3controls.getVisibility() == View.GONE) {
             hidemp3controls.setVisibility(View.VISIBLE);
         } else {
@@ -125,6 +137,14 @@ public class AllMp3JavaActivity extends AppCompatActivity {
                         ppplaybackState = true;
                     }
                 }
+            }
+        });
+        cancelback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleExoplayer.release();
+                simpleExoplayer.stop(true);
+                hidemp3controls.setVisibility(View.GONE);
             }
         });
         simpleExoplayer.addListener(new Player.EventListener() {
@@ -437,6 +457,7 @@ public class AllMp3JavaActivity extends AppCompatActivity {
         allmp3eorec = findViewById(R.id.allmp3eorec);
         moreopt = findViewById(R.id.moreopt);
         hidemp3controls = findViewById(R.id.hidemp3controls);
+        cancelback = findViewById(R.id.cancelback);
         backsongname = findViewById(R.id.exo_position);
         backplaypause = findViewById(R.id.backplaypause);
         videoonly = findViewById(R.id.videoonly);
@@ -445,7 +466,14 @@ public class AllMp3JavaActivity extends AppCompatActivity {
         song_namewa = findViewById(R.id.song_namewa);
         videoasmp3 = findViewById(R.id.videoasmp3);
         searchsongs = findViewById(R.id.searchsongs);
-
+        backsongname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                simpleExoplayer.release();
+                simpleExoplayer.stop();
+                hidemp3controls.setVisibility(View.GONE);
+            }
+        });
         videoonly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

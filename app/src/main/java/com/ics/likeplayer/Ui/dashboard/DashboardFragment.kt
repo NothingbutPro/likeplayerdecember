@@ -53,8 +53,8 @@ class DashboardFragment : Fragment() {
     }
 
     private fun readmp3mediafiles(activity: FragmentActivity?) {
+        DirectoriesList.clear()
         Toast.makeText(activity,"Called",Toast.LENGTH_LONG).show()
-
         val contentResolver = context?.getContentResolver()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         val music = MediaStore.Audio.Media.IS_MUSIC + " != 0"
@@ -123,7 +123,7 @@ class DashboardFragment : Fragment() {
 //                        }
 
                     }else{
-                        Log.e("homefrag else else wa" , ""+DIrSOngs.get(cursor.position))
+//                        Log.e("homefrag else else wa" , ""+DIrSOngs.get(cursor.position))
                     }
 
                 }

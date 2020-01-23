@@ -1,6 +1,8 @@
 package com.ics.likeplayer.Model;
 
-public class AllVideos {
+import java.io.Serializable;
+
+public class AllVideos implements Serializable {
     String Name;
     int Length;
     String Thmb;

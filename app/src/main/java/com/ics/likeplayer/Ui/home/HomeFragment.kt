@@ -72,6 +72,7 @@ class HomeFragment : Fragment() {
         sname = root.findViewById(R.id.sname)
         arttist = root.findViewById(R.id.arttist)
         Allsdcardrec = root.findViewById(R.id.allsdcardrec)
+        DirectoriesList.clear()
 //        homeViewModel.text.observe(this, Observer {
 //            textView.text = it
 //        })

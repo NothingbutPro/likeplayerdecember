@@ -67,7 +67,7 @@
 
         android:id="@+id/medli"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:orientation="horizontal"
 
         app:layout_constraintBottom_toBottomOf="@+id/simpleExoPlayerView"
@@ -183,8 +183,6 @@
                             android:paddingRight="20dp">
 
                             <ImageView
-
-
                                 android:layout_width="15dp"
                                 android:layout_height="15dp"
                                 android:background="@drawable/lockicons8folder32">
@@ -193,13 +191,15 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/moreplayoptionsli"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 
                             <ImageView
-                                android:layout_width="15dp"
-                                android:layout_height="15dp"
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:background="@drawable/moremenu">
 
                             </ImageView>
@@ -218,7 +218,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/horizotalli">
 
         <LinearLayout
@@ -327,7 +326,7 @@
        >
 <!--        ++++++++++++++//must hide li++++++++++++++++++++++++++++++++-->
         <LinearLayout
-
+            android:visibility="gone"
             android:id="@+id/hideli"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

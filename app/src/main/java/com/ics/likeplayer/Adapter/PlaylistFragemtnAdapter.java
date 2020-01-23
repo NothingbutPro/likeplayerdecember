@@ -1,6 +1,5 @@
 package com.ics.likeplayer.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -13,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ics.likeplayer.Database.DatabaseHelper;
 import com.ics.likeplayer.Database.Model.Database_players_play;
-import com.ics.likeplayer.FurtherActivity.AllVideoActivity;
-import com.ics.likeplayer.Model.DIrectories_Folders;
+import com.ics.likeplayer.FurtherActivity.PlalyistViews.AllPlayListViewActivity;
 import com.ics.likeplayer.R;
 
 import java.util.ArrayList;
@@ -23,26 +21,26 @@ import static com.ics.likeplayer.Adapter.MyAllVideosAdpter._Song_name;
 import static com.ics.likeplayer.Adapter.MyAllVideosAdpter._Song_time;
 import static com.ics.likeplayer.Adapter.MyAllVideosAdpter._Song_url;
 
-public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHolder>  {
+public class PlaylistFragemtnAdapter extends RecyclerView.Adapter<PlaylistFragemtnAdapter.ViewHolder>  {
     private DatabaseHelper db;
     private Context context;
     private ArrayList<Database_players_play> pojoClassArrayList;
 
-    public PlayListAdapter(Context context, ArrayList<Database_players_play> pojoClassArrayList) {
+    public PlaylistFragemtnAdapter(Context context, ArrayList<Database_players_play> pojoClassArrayList) {
         this.context = context;
         this.pojoClassArrayList = pojoClassArrayList;
         db = new DatabaseHelper(context);
     }
     @Override
-    public PlayListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PlaylistFragemtnAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.directories, parent, false);
 
-        return new PlayListAdapter.ViewHolder(itemView);
+        return new PlaylistFragemtnAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(PlayListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(PlaylistFragemtnAdapter.ViewHolder holder, int position) {
         Log.e("Dire namne is",""+pojoClassArrayList.get(position).getPlay_list_name());
 //        pojoClassArrayList.set(position , )
 //        DirectoriesList.set
@@ -50,17 +48,10 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHo
         holder.Dir_Name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if(_Song_name.isEmpty()) {
-                        db.insertintoExistingPlay(v.getContext(), pojoClassArrayList.get(position).getPlay_id(), pojoClassArrayList.get(position).getPlay_list_name(),
-                                _Song_name, _Song_url, _Song_time);
-                    }
-                }catch (Exception e)
-                {
-                    e.printStackTrace();
-                    db.insertintoExistingPlay(v.getContext(), pojoClassArrayList.get(position).getPlay_id(), pojoClassArrayList.get(position).getPlay_list_name(),
-                            AllMp3Adapters._Song_name, AllMp3Adapters._Song_url, AllMp3Adapters._Song_time);
-                }
+                Intent intent  = new Intent(v.getContext() , AllPlayListViewActivity.class);
+                intent.putExtra("play_name" , pojoClassArrayList.get(position).getPlay_list_name());
+                intent.putExtra("play_type" , String.valueOf( pojoClassArrayList.get(position).getPlay_id()));
+                v.getContext().startActivity(intent);
             }
         });
 //        holder.Dir_Name.setOnClickListener(new View.OnClickListener() {
@@ -100,3 +91,4 @@ public class PlayListAdapter extends RecyclerView.Adapter<PlayListAdapter.ViewHo
         }
     }
 }
+

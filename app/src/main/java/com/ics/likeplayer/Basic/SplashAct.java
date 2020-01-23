@@ -3,6 +3,7 @@ package com.ics.likeplayer.Basic;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -18,10 +19,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.ics.likeplayer.MainActivity;
+import com.ics.likeplayer.MyDeleteService;
 import com.ics.likeplayer.R;
+import com.ics.likeplayer.SessionManage.SessionManager;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class SplashAct extends AppCompatActivity {
@@ -44,7 +48,27 @@ public class SplashAct extends AppCompatActivity {
 
                 if( checkAndRequestPermissions()) {
                     mHandler.removeCallbacksAndMessages(null);
-
+                    try {
+                        if (new SessionManager(SplashAct.this).getGetDeleteURl().isEmpty())
+                        {
+                            if(String.valueOf(Calendar.getInstance().getTime().getDate()).equals(new SessionManager(SplashAct.this).getUS()))
+                            {
+                                File photoLcl = new File(new  SessionManager(SplashAct.this).getGetDeleteURl());
+                                Uri imageUriLcl = FileProvider.getUriForFile(SplashAct.this,
+                                        SplashAct.this.getApplicationContext().getPackageName() +
+                                                ".provider", photoLcl);
+                                ContentResolver contentResolver =SplashAct.this.getContentResolver();
+                                contentResolver.delete(imageUriLcl, null, null);
+                                Toast.makeText(SplashAct.this, "Delition success", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(SplashAct.this, "There  is still a time", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }catch (Exception e)
+                    {
+                        Toast.makeText(SplashAct.this, "Nothing for delete", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
                     Toast.makeText(SplashAct.this, "Thanks", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SplashAct.this, MainActivity.class);
                     startActivity(intent);
@@ -93,11 +117,7 @@ public class SplashAct extends AppCompatActivity {
 //        };
 //        background.start();
         // start thread
-
-
     }
-
-
     //*******************************************************************
     private  boolean checkAndRequestPermissions() {
 //        int permissionCamara = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_SETTINGS);

@@ -10,11 +10,17 @@
 <!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
 <!--    android:layout_width="match_parent"-->
 <!--    android:layout_height="wrap_content">-->
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
     <LinearLayout
         android:layout_margin="1dp"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/color_white"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
@@ -29,6 +35,7 @@
             android:orientation="horizontal"
             >
             <ImageView
+                android:id="@+id/simpledirimg"
                 android:layout_width="40dp"
                 android:padding="9dp"
                 android:layout_height="40dp"
@@ -39,6 +46,12 @@
                 android:layout_height="match_parent"
                 android:padding="5dp"
                 android:weightSum="1">
+                <LinearLayout
+
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
             <TextView
 
                 android:layout_height="match_parent"
@@ -54,6 +67,10 @@
                 android:textStyle="normal"
 
                />
+
+
+
+                </LinearLayout>
                 <ImageView
                     android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -66,8 +83,10 @@
         </LinearLayout>
 
 
-
     </LinearLayout>
+
+
+</LinearLayout>
 <!--</androidx.cardview.widget.CardView>-->
 <!--    <View-->
 <!--        android:layout_width="match_parent"-->

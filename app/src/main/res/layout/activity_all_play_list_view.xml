@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FurtherActivity.PlalyistViews.AllPlayListViewActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:background="@color/colorPrimary"
+            android:id="@+id/upperimgli"
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@drawable/layout_border"
+                    android:src="@drawable/songsmusictrack"
+                    android:id="@+id/mainthubimg"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp">
+
+                </ImageView>
+        <TextView
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:id="@+id/play_name"
+            android:layout_marginLeft="10dp"
+            android:textSize="18dp"
+            android:textColor="@color/color_white"
+            android:text="play_list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:padding="10dp"
+            android:background="@drawable/layout_border"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:padding="4dp"
+                android:src="@drawable/ic_volume_up"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+            </ImageView>
+            <TextView
+                android:textAlignment="center"
+                android:padding="1dp"
+                android:text="Shuffle All"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            <TextView
+                android:text="   0"
+                android:id="@+id/playlistitems"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextView>
+            </LinearLayout>
+            <ImageView
+                android:src="@drawable/addbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </ImageView>
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/playlistsongsrec"
+            android:padding="10dp"
+            android:layout_below="@+id/upperimgli"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
+    <com.google.android.exoplayer2.ui.PlaybackControlView
+        android:visibility="gone"
+        android:layout_gravity="bottom"
+        android:id="@+id/hidemp3controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:foregroundGravity="bottom"
+        app:controller_layout_id="@layout/likebackpalyercontrols"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:show_timeout="0" />
+</androidx.constraintlayout.widget.ConstraintLayout>

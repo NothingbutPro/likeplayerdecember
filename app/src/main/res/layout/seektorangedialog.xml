@@ -14,12 +14,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/startaseekbtn"
             android:text="A"
             android:layout_width="40dp"
             android:layout_height="40dp">
 
         </Button>
         <TextView
+            android:textColor="@color/color_white"
             android:gravity="center_horizontal"
             android:textSize="9dp"
             android:text="00.40"
@@ -29,6 +31,7 @@
 
         </TextView>
         <TextView
+            android:textColor="@color/color_white"
             android:gravity="center_horizontal"
             android:textSize="9dp"
             android:layout_marginTop="20dp"
@@ -39,6 +42,7 @@
 
         </TextView>
         <Button
+            android:id="@+id/startbseekbtn"
             android:text="B"
             android:layout_width="40dp"
             android:layout_height="40dp">
@@ -46,6 +50,7 @@
         </Button>
     </LinearLayout>
         <ImageView
+            android:id="@+id/cancel_act_img"
             android:src="@drawable/cancel_act"
             android:layout_width="20dp"
             android:layout_height="20dp">

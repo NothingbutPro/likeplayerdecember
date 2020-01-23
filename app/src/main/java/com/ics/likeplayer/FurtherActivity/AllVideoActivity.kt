@@ -18,9 +18,10 @@ import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.ics.likeplayer.Adapter.MyAllVideosAdpter
-import com.ics.likeplayer.MainActivity
+import com.ics.likeplayer.Basic.MainActivity
 import com.ics.likeplayer.Model.AllVideos
 import com.ics.likeplayer.R
+import com.ics.likeplayer.SessionManage.SessionManager
 import java.io.File
 import java.util.*
 
@@ -52,6 +53,15 @@ class AllVideoActivity : AppCompatActivity() {
             Toast.makeText(this, "New video", Toast.LENGTH_SHORT).show();
 //            simpleExoplayer.stop()
         }
+        Toast.makeText(applicationContext , "Destroyed" , Toast.LENGTH_LONG).show();
+        var session = SessionManager(this)
+        if(session.getDeleteURl !=null)
+        {
+            Toast.makeText(applicationContext , "You have detek schedule" , Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(applicationContext , "Good to go" , Toast.LENGTH_LONG).show();
+        }
+
         super.onDestroy()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -193,4 +203,6 @@ class AllVideoActivity : AppCompatActivity() {
         Log.e("Started" , "AllVideoActivity.")
         super.onStart()
     }
+
+
 }

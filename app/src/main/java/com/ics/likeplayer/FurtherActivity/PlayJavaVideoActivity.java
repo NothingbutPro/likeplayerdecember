@@ -1,7 +1,6 @@
 package com.ics.likeplayer.FurtherActivity;
 import android.app.Dialog;
 import android.app.PictureInPictureParams;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,69 +8,69 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RemoteViews;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GestureDetectorCompat;
 
-import com.github.nisrulz.sensey.Sensey;
-import com.github.nisrulz.sensey.ShakeDetector;
-import com.github.nisrulz.sensey.TouchTypeDetector;
+import com.bullhead.equalizer.DialogEqualizerFragment;
+import com.bullhead.equalizer.EqualizerFragment;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.hmomeni.verticalslider.VerticalSlider;
+import com.ics.likeplayer.Database.Model.Database_players_play;
+import com.ics.likeplayer.Model.AllVideos;
 import com.ics.likeplayer.R;
 import com.ics.likeplayer.ScreenshotManager;
 import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+
 import static androidx.core.view.ViewCompat.LAYER_TYPE_HARDWARE;
 
 public class PlayJavaVideoActivity extends AppCompatActivity {
@@ -88,17 +87,24 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public TextView exo_position;
     public TextView exo_duration;
     public LinearLayout backplayimg;
+    ImageView nextthedamn;
+    ImageView go_previous;
     public  File _videofile;
     //+++++++++++++++++++++++++++++++++++++++Windows postions for player for repeat and back play+++++++++++++
     int currentwindows;
     long currentwindowspositions;
-    long positionneedrepeat;
-    //+++++++++++++++++++++++++++++++++++++++++++++++
+    //+++++++++++++++++++++++++++++++++++++++++++++++GET PLAYLIST++++++++++++++++++++++++++++++
+    ArrayList<Database_players_play> database_players_playArrayList = new ArrayList<>();
+    ArrayList<AllVideos> _players_playArrayList = new ArrayList<>();
+    int Playlist_position = 0;
+    String Playlist_song_url;
+    int play_fromwhere = 0;
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     //++++++++++++++++++++++++++++FOr timer++++++++++++++++
     int _1_min;
     int brightnesscount = 0;
-    //++++++++++++++++++
-    //    private View progressBar;
+    //++++++++++++++++++++++++++++++++++++For MEnu Options+++++++++++++++
+    LinearLayout moreplayoptionsli;
 //+++++++++++++++++++++++++++++++++For Variables++++++++++++++++++++++++
     public int REQUEST_ID = 1;
     public long videoPosition = 0;
@@ -108,7 +114,6 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public Boolean ScreenLockORNot = false;
     public Context context;
     public ImageView fullthedamn;
-
 //+++++++++++++++++++++++++++++++++++++++All Controls+++++++++++++++++++++++++++++++++++++++++++++++++
     ImageView ReverseBtn;
     ImageView nightmodeimg,abrepeatimg;
@@ -121,14 +126,21 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     int clicks = 1;
     Boolean greysacle = false;
     boolean ppplaybackState;
+    ImageView repeat_modes;
     //+++++++++++++++++++++++++++++++++++++++FOR GESTURES+++++++++++++++++
     Runnable r,r2;
-    //    private DiscreteSlider mSlider;
     Handler mHandler;
     Handler mHandler2;
     private float brightness = (float) 225;
     //Content resolver used as a handle to the system's settings
     private ContentResolver cResolver;
+    //++++++++++++++++++++++++++++++++++++++For Current video loop+++++++++++++++++++
+    long Currenttimeseek;
+    Handler seekdownHandler;
+    Runnable seekrunnable;
+    int repeat_mode_int = 0;
+    long positionneedrepeata =-1,positionneedrepeatb=-1;
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++
     //Window object, that will store a reference to the current window
     private Window window;
     private String myvideo;
@@ -160,8 +172,18 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        mHandler.removeCallbacks(r);
-        mHandler.removeCallbacks(r2);
+        try {
+            mHandler.removeCallbacks(r);
+            mHandler2.removeCallbacks(r2);
+            seekdownHandler.removeCallbacks(seekrunnable);
+            mHandler.removeCallbacksAndMessages(null);
+            seekdownHandler.removeCallbacksAndMessages(null);
+            mHandler2.removeCallbacksAndMessages(null);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         super.onDestroy();
     }
 
@@ -170,15 +192,64 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_video);
         super.onCreate(savedInstanceState);
         context = PlayJavaVideoActivity.this;
+        //++++++++++++++++++++++++++++++++++++++++++++++++++Retrive the PLAYLIST++++++++++++++++++++
+
+        //+++++++++++++++++++++++++++++++++++++
         //Get the content resolver
         cResolver = getContentResolver();
         window = getWindow();
-
         mvolumeDetector = new GestureDetectorCompat(this, new MyVolumeGestureListener());
         mvbrigtnessDetector = new GestureDetectorCompat(this, new MyBrightnessGestureListener());
         InitializeEverything();
-        InitializePlayer();
-        InitializePlayerControls();
+        moreplayoptionsli.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Creating the instance of PopupMenu
+                PopupMenu popup = new PopupMenu(PlayJavaVideoActivity.this, moreplayoptionsli);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater().inflate(R.menu.play_menu_full, popup.getMenu());
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+//                        Toast.makeText(PlayJavaVideoActivity.this,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                        if(item.getItemId() != R.id.repeat_mode) {
+                            DialogEqualizerFragment fragment = DialogEqualizerFragment.newBuilder()
+                                    .setAudioSessionId(simpleExoplayer.getAudioSessionId())
+                                    .themeColor(ContextCompat.getColor(PlayJavaVideoActivity.this, R.color.color_black))
+                                    .textColor(ContextCompat.getColor(PlayJavaVideoActivity.this, android.R.color.holo_blue_dark))
+                                    .accentAlpha(ContextCompat.getColor(PlayJavaVideoActivity.this, android.R.color.holo_blue_light))
+                                    .darkColor(ContextCompat.getColor(PlayJavaVideoActivity.this, android.R.color.holo_orange_light))
+                                    .setAccentColor(ContextCompat.getColor(PlayJavaVideoActivity.this, android.R.color.holo_red_dark))
+                                    .build();
+                            fragment.show(getSupportFragmentManager(), "eq");
+                        }
+                        return true;
+                    }
+                });
+
+                popup.show();//showing popup menu
+            }
+        });
+        if(!getIntent().toString().isEmpty()) {
+            try {
+                database_players_playArrayList = (ArrayList<Database_players_play>) getIntent().getSerializableExtra("playplaylist");
+                Playlist_song_url = database_players_playArrayList.get(0).getSong_url();
+                play_fromwhere =1;
+                InitializePlayer();
+                InitializePlayerControls();
+            }catch (Exception e)
+            {
+                _players_playArrayList = (ArrayList<AllVideos>) getIntent().getSerializableExtra("playplaylist");
+                Playlist_song_url = _players_playArrayList.get(0).getPath();
+                InitializePlayer();
+                play_fromwhere =2;
+                InitializePlayerControls();
+                e.printStackTrace();
+            }
+        }
+
+
         imghideshow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +261,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                 }
             }
         });
+
         simpleExoplayer.addListener(new Player.DefaultEventListener() {
             @Override
             public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
@@ -209,7 +281,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 
             @Override
             public void onIsPlayingChanged(boolean isPlaying) {
-
+//                Toast.makeText(context, "is "+isPlaying, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -218,11 +290,14 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
             }
             @Override
             public void onSeekProcessed() {
-                Toast.makeText(context, "my currentwindows is"+currentwindows, Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "my currentwindowspositions is"+currentwindowspositions, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "my currentwindows is"+currentwindows, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "my currentwindowspositions is"+currentwindowspositions, Toast.LENGTH_SHORT).show();
                 currentwindows = simpleExoplayer.getCurrentWindowIndex();
                 currentwindowspositions = simpleExoplayer.getCurrentPosition();
+
+
             }
+
         });
         if(myVericalbrigrtness == 100)
         {
@@ -559,11 +634,12 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         abrepeatimg = findViewById(R.id.abrepeatimg);
         NextBtn = findViewById(R.id.exo_next);
         FastForwardBtn = findViewById(R.id.exo_ffwd);
+        nextthedamn = findViewById(R.id.nextthedamn);
         fullthedamn = findViewById(R.id.fullthedamn);
         brightverticalSlider = findViewById(R.id.brightverticalSlider);
         timer_counttxt = findViewById(R.id.timer_counttxt);
         RepeatBtn = findViewById(R.id.exo_repeat_toggle);
-        RepeatBtn = findViewById(R.id.exo_repeat_toggle);
+        go_previous = findViewById(R.id.go_previous);
         verticalSlider = findViewById(R.id.verticalSlider);
 //        VolumeBtn = findViewById(R.id.exo_);
         BackFastForwardBtn = findViewById(R.id.exo_rew);
@@ -579,21 +655,174 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         greyscalebtn = findViewById(com.ics.likeplayer.R.id.greyscalebtn);
         backplayimg = findViewById(com.ics.likeplayer.R.id.backplayimg);
         exo_position = findViewById(R.id.exo_position);
+        repeat_modes = findViewById(R.id.repeat_modes);
         // get the gesture detector
         //++++++++++++++++++++++++++++++++++++++++++++++++MAin Functions+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //++++++++++++++++++++++++++++++++++++++++++++++FOR PREIVIOUS ITEM++++++++++++++++++++++++++++++++++++++++++++
+        //++++++++++++++++++++++++++++++++++For Repeate mode++++++++++++++++++++++++++++++++++++++++++
+        repeat_modes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if( repeat_mode_int ==1)
+                {
+                    Toast.makeText(context, "Repeat is on", Toast.LENGTH_SHORT).show();
+                    repeat_mode_int++;
+
+                }else if(repeat_mode_int ==2){
+                    Toast.makeText(context, "Shuffle is on", Toast.LENGTH_SHORT).show();
+                    repeat_mode_int++;
+                }else  if(repeat_mode_int ==3)
+                {
+                    Toast.makeText(context, "Single Repeat is on", Toast.LENGTH_SHORT).show();
+                    repeat_mode_int=0;
+                }else {
+                    Toast.makeText(context, "Normal Mode is on", Toast.LENGTH_SHORT).show();
+                    repeat_mode_int++;
+                }
+            }
+        });
+        //++++++++++++++++++++++
+        go_previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Playlist_position--;
+
+                if(Playlist_position !=-1)
+                {
+                    if(play_fromwhere ==1) {
+                        simpleExoplayer.release();
+                        simpleExoplayer.stop();
+                        Playlist_song_url = database_players_playArrayList.get(Playlist_position).getSong_url();
+                        InitializePlayer();
+                    }else {
+                        simpleExoplayer.release();
+                        simpleExoplayer.stop();
+                        Playlist_song_url = _players_playArrayList.get(Playlist_position).getPath();
+                        InitializePlayer();
+                    }
+
+                }else {
+                    try {
+                        simpleExoplayer.release();
+                        simpleExoplayer.stop();
+                        Playlist_position++;
+                        if(play_fromwhere ==1) {
+                            Playlist_song_url = database_players_playArrayList.get(Playlist_position).getSong_url();
+                        }else {
+                            Playlist_song_url = _players_playArrayList.get(Playlist_position).getPath();
+                        }
+                        InitializePlayer();
+                    }catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+
+        //+++++++++++++++++++++++++++++++++++++++++++++
+        //+++++++++++++++++++++++++++++++++++++++++++++++For NExt item+++++++++++++++++++++++++
+        nextthedamn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if(play_fromwhere ==1) {
+                        if (!database_players_playArrayList.get(Playlist_position).getSong_url().isEmpty()) {
+
+                            Playlist_position++;
+                            Playlist_song_url = database_players_playArrayList.get(Playlist_position).getSong_url();
+                            simpleExoplayer.release();
+                            simpleExoplayer.stop();
+                            InitializePlayer();
+//                        InitializePlayerControls();
+                        }
+                    }else {
+                        if (!_players_playArrayList.get(Playlist_position).getPath().isEmpty()) {
+
+                            Playlist_position++;
+                            Playlist_song_url = _players_playArrayList.get(Playlist_position).getPath();
+                            simpleExoplayer.release();
+                            simpleExoplayer.stop();
+                            InitializePlayer();
+//                        InitializePlayerControls();
+                        }
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Toast.makeText(context, "You are on the last in playlist", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //+++++++++++++++++++
         //++++++++++++++++++++++++++++++++++++++++++++FOR AUTO REPEAT+++++++++++++++++++++++++++++++
+
         abrepeatimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //             currentwindowspositions=  simpleExoplayer.getCurrentPosition();
+
                 final Dialog dialog = new Dialog(v.getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setCancelable(true);
-//                dialog.setContentView(R.layout.seektorangedialog);
+//                dialog.setContentView(R.layout.seektorangedialog);\
                 View view = LayoutInflater.from(v.getContext()).inflate(R.layout.seektorangedialog, null);
                 Drawable d = new ColorDrawable(Color.BLACK);
                 d.setAlpha(130);
+                //++++++++++++++++++++++++++++++++++++++++++++Time loop for a++++++++++++++++++
+                ImageView cancel_act = view.findViewById(R.id.cancel_act_img);
+                cancel_act.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button startaseekbtn = view.findViewById(R.id.startaseekbtn);
+                TextView timeloopa = view.findViewById(R.id.timeloopa);
+                startaseekbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        positionneedrepeata =simpleExoplayer.getCurrentPosition();
+                        int positiona = (int) ((simpleExoplayer.getCurrentPosition() * 100) / simpleExoplayer.getDuration());
+//                        Toast.makeText(PlayJavaVideoActivity.this, "value is" + positiona, Toast.LENGTH_SHORT).show();
+                        long value_of_point = ((TimeUnit.MILLISECONDS.toSeconds(Currenttimeseek) )%60);
+//                            value_of_point= TimeUnit.SECONDS.toMinutes(value_of_point);
+                            timeloopa.setText(String.valueOf(TimeUnit.MILLISECONDS.toMinutes(Currenttimeseek)) +":"+ value_of_point );
 
+                    }
+                });
+                //++++++++++++++++++For time loop B++++++++++++++
+                Button startbseekbtn = view.findViewById(R.id.startbseekbtn);
+                TextView timeloopb = view.findViewById(R.id.timeloopb);
+                startbseekbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(positionneedrepeata !=-1) {
+                            positionneedrepeatb = -1;
+                            int positiona = (int) ((simpleExoplayer.getCurrentPosition() * 100) / simpleExoplayer.getDuration());
+//                            Toast.makeText(PlayJavaVideoActivity.this, "value is" + positiona, Toast.LENGTH_SHORT).show();
+//                        timeloopb.setText(String.valueOf(positiona));
+                            positionneedrepeatb = simpleExoplayer.getCurrentPosition();
+                            long value_of_point = ((TimeUnit.MILLISECONDS.toSeconds(Currenttimeseek)) % 60);
+//                        value_of_point= TimeUnit.SECONDS.toMinutes(value_of_point);
+                            timeloopb.setText(String.valueOf(TimeUnit.MILLISECONDS.toMinutes(Currenttimeseek)) + ":" + value_of_point);
+                            try {
+                                if (!timeloopa.getText().toString().isEmpty()) {
+                                    simpleExoplayer.seekTo(positionneedrepeata);
+                                    dialog.dismiss();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }else {
+                            Toast.makeText(PlayJavaVideoActivity.this, "Please select the A first", Toast.LENGTH_SHORT).show();
+                        }
+//                        timeloopb.setText(String.valueOf(TimeUnit.MILLISECONDS.toMinutes(Currenttimeseek)) +":"+TimeUnit.MILLISECONDS.toSeconds(Currenttimeseek));
+                    }
+                });
+                //+++++++++++++++++++++++++
                 // Setting dialogview
                 Window window = dialog.getWindow();
                 window.setGravity(Gravity.RIGHT);
@@ -606,7 +835,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
         nightmodeimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Working mode on", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Working mode on", Toast.LENGTH_SHORT).show();
                 //constrain the value of brightness
                 if(brightnesscount ==0)
                 {
@@ -644,9 +873,11 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                     {
                         simpleExoplayer.setPlayWhenReady(false);
                         ppplaybackState =false;
+
                     }else {
                         simpleExoplayer.setPlayWhenReady(true);
                         ppplaybackState = true;
+
                     }
                 }
             }
@@ -1011,7 +1242,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
         if (isInPictureInPictureMode) {
-            Toast.makeText(this, "You done it well", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "You done it well", Toast.LENGTH_LONG).show();
 
             // Hide the full-screen UI (controls, etc.) while in picture-in-picture mode.
         } else {
@@ -1036,6 +1267,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_ID) {
 //            ScreenshotManager.INSTANCE.onActivityResult(resultCode, data);
+            mainli.setVisibility(View.VISIBLE);
             Toast.makeText(this, "Done", Toast.LENGTH_LONG).show();
             ScreenshotManager.INSTANCE.takeScreenshot(this, data);
         }
@@ -1044,6 +1276,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 
     private void InitializeEverything() {
         vidview = findViewById(com.ics.likeplayer.R.id.simpleExoPlayerView);
+        moreplayoptionsli = findViewById(com.ics.likeplayer.R.id.moreplayoptionsli);
         screenshot = findViewById(com.ics.likeplayer.R.id.screenshot);
         controls = findViewById(com.ics.likeplayer.R.id.controls);
         slevidname = findViewById(com.ics.likeplayer.R.id.slevidname);
@@ -1065,7 +1298,16 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 
     private void prepareExoplayer() {
         vidview.setPlayer(simpleExoplayer);
-        myvideo = getIntent().getStringExtra("vidurl");
+        try {
+            if (!database_players_playArrayList.isEmpty()) {
+                myvideo =Playlist_song_url ;
+//                Playlist_song_url= myvideo;
+            }
+        }catch (Exception e)
+        {
+            myvideo = getIntent().getStringExtra("vidurl");
+            e.printStackTrace();
+        }
         _videofile = new File(myvideo);
         Uri uri = Uri.parse(myvideo);
 //        MediaSource mediaSource = buildMediaSource(uri);
@@ -1101,13 +1343,99 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
 
                 } else
                 if (playbackState == Player.STATE_READY) {
+                    Toast.makeText(context, "Player is ready", Toast.LENGTH_SHORT).show();
+                    StartTheTimer();
                 } else
                 if (playbackState == Player.STATE_ENDED) {
 
                     Toast.makeText(getApplicationContext(), "Your video has been ended", Toast.LENGTH_SHORT).show();
+
+                    if(!Playlist_song_url.isEmpty())
+                    {
+                        Playlist_position++;
+                        simpleExoplayer.release();
+                        simpleExoplayer.stop();
+                        try {
+                            if(repeat_mode_int ==1)
+                            {
+
+                                if(Playlist_position !=-1) {
+                                    if(play_fromwhere ==1) {
+                                        if (Playlist_position == database_players_playArrayList.size()) {
+                                            Playlist_song_url = database_players_playArrayList.get(0).getSong_url();
+                                        }else {
+                                            Playlist_song_url = database_players_playArrayList.get(Playlist_position).getSong_url();
+                                        }
+
+                                    }else {
+                                        if (Playlist_position == _players_playArrayList.size()) {
+                                            Playlist_song_url = _players_playArrayList.get(0).getPath();
+                                        }else {
+                                            Playlist_song_url = _players_playArrayList.get(Playlist_position).getPath();
+                                        }
+                                    }
+                                }
+                            }else if(repeat_mode_int ==2) {
+                                if(Playlist_position != database_players_playArrayList.size()) {
+                                    Playlist_song_url = database_players_playArrayList.get(Playlist_position+2).getSong_url();
+                                }
+                                else if(repeat_mode_int ==3) {
+                                    if (Playlist_position != database_players_playArrayList.size()) {
+                                        Playlist_song_url = database_players_playArrayList.get(Playlist_position + 2).getSong_url();
+                                    }
+                                }
+                                else
+                                {
+                                    if(Playlist_position !=-1) {
+                                        Playlist_song_url = database_players_playArrayList.get(Playlist_position--).getSong_url();
+                                    }
+                                }
+                            }else {
+                                if(Playlist_position == database_players_playArrayList.size())
+                                {
+                                    Playlist_song_url = database_players_playArrayList.get(0).getSong_url();
+                                }
+                            }
+                            if(play_fromwhere ==1) {
+                                Playlist_song_url = database_players_playArrayList.get(Playlist_position).getSong_url();
+                            }else {
+                                Playlist_song_url = _players_playArrayList.get(Playlist_position).getPath();
+                            }
+                            InitializePlayer();
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(context, "Playlist ended", Toast.LENGTH_SHORT).show();
+
+                            e.printStackTrace();
+                        }
+                        InitializePlayer();
+                    }
                 }
             }
         });
+
+    }
+
+    private void StartTheTimer() {
+        Toast.makeText(context, "Timer starting", Toast.LENGTH_SHORT).show();
+        seekdownHandler = new Handler();
+        seekrunnable = new Runnable() {
+            public void run() {
+                Log.e("seeking" , "running");
+                Currenttimeseek = simpleExoplayer.getCurrentPosition();
+                if(positionneedrepeatb != -1) {
+                    if (Currenttimeseek > positionneedrepeatb) {
+//                        Toast.makeText(context, "Matched", Toast.LENGTH_SHORT).show();
+                        simpleExoplayer.seekTo(positionneedrepeata);
+                    } else {
+//                        Toast.makeText(context, "Not " + Currenttimeseek + " /" + positionneedrepeatb, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                seekdownHandler.postDelayed(this, 1000);
+            }
+        };
+        seekdownHandler.postDelayed(seekrunnable, 1000);
+
     }
 
     private MediaSource buildMediaSource(Uri uris) {

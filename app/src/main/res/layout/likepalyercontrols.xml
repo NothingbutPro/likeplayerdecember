@@ -48,13 +48,12 @@
         <ImageView
 
             android:id="@+id/greyscalebtn"
-            android:layout_width="@dimen/size_thirty_five"
-            android:layout_height="@dimen/size_thirty_five"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="3dp"
-
             android:background="@drawable/drawable_rounded_transparent"
             android:padding="@dimen/size_ten"
-            android:src="@drawable/drawable_volume_selector"
+            android:src="@drawable/blacknwhite"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
@@ -64,14 +63,14 @@
             android:layout_weight="0.50">
 
         <ImageView
-            android:id="@+id/rotate"
-            android:layout_width="@dimen/size_thirty_five"
-            android:layout_height="@dimen/size_thirty_five"
+            android:id="@+id/repeat_modes"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_margin="3dp"
             android:layout_marginLeft="170dp"
             android:background="@drawable/drawable_rounded_transparent"
             android:padding="@dimen/size_ten"
-            android:src="@drawable/drawable_volume_selector"
+            android:src="@drawable/repeatplay"
             />
 
         </LinearLayout>
@@ -148,7 +147,7 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1">
         <ImageView
-            android:id="@+id/exo_prev"
+            android:id="@+id/go_previous"
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

@@ -1,6 +1,8 @@
 package com.ics.likeplayer.Database.Model;
 
-public class Database_players_play {
+import java.io.Serializable;
+
+public class Database_players_play implements Serializable {
     public static final String PLAYLIST_TABLE_NAME = "PlayList";
     public static final String PLAYLIST_FAVORITES = "Favorites";
     public static final String SONG_TABLE_NAME = "PlayList_Songs";
@@ -44,13 +46,13 @@ public class Database_players_play {
                     + COLUMN_PLAYLIST_TYPE + " TEXT,"
                     + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
                     + ")";
-    public static final String CREATE_FAVORITE_TABLE =
+    public static final String CREATE_FAVORITE_SONG_TABLE =
             "CREATE TABLE " + PLAYLIST_FAVORITES + "("
-                    +  COLUMN_PLAYLIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + COLUMN_PLAYLIST_URL + " TEXT,"
-                    + COLUMN_PLAYLIST_NAME + " VARCHAR,"
-                    + COLUMN_PLAYLIST_NO_OF_SONGS + " INT,"
-                    + COLUMN_PLAYLIST_TYPE + " TEXT,"
+                    + SONG_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + COLUMN_SONGNAME + " VARCHAR,"
+                    + COLUMN_URL + " TEXT,"
+                    + COLUMN_TIME + " TEXT,"
+                    + COLUMN_PLAYLIST_NAME + " TEXT,"
                     + COLUMN_TIMESTAMP + " DATETIME DEFAULT CURRENT_TIMESTAMP"
                     + ")";
 //                public static final String CREATE_FAVORITE_TABLE =
@@ -92,6 +94,15 @@ public class Database_players_play {
         this.song_name = song_name;
         this.song_url = song_url;
         this.song_time = song_time;
+        this.timestamp = timestamp;
+    }
+
+    public Database_players_play(int song_id, String song_name, String song_url, String column_time, String play_list_name, String timestamp) {
+        this.play_id = song_id;
+        this.song_name = song_name;
+        this.song_url = song_url;
+        this.song_time = column_time;
+        this.play_list_name = play_list_name;
         this.timestamp = timestamp;
     }
 
