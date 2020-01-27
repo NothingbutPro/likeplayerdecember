@@ -65,6 +65,8 @@ import com.ics.likeplayer.Database.Model.Database_players_play;
 import com.ics.likeplayer.Model.AllVideos;
 import com.ics.likeplayer.R;
 import com.ics.likeplayer.ScreenshotManager;
+import com.marcoscg.dialogsheet.DialogSheet;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -213,7 +215,7 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
 //                        Toast.makeText(PlayJavaVideoActivity.this,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                        if(item.getItemId() != R.id.repeat_mode) {
+                        if(item.getItemId() != R.id.add_sub_titls) {
                             DialogEqualizerFragment fragment = DialogEqualizerFragment.newBuilder()
                                     .setAudioSessionId(simpleExoplayer.getAudioSessionId())
                                     .themeColor(ContextCompat.getColor(PlayJavaVideoActivity.this, R.color.color_black))
@@ -223,6 +225,16 @@ public class PlayJavaVideoActivity extends AppCompatActivity {
                                     .setAccentColor(ContextCompat.getColor(PlayJavaVideoActivity.this, android.R.color.holo_red_dark))
                                     .build();
                             fragment.show(getSupportFragmentManager(), "eq");
+                        }else {
+                            DialogSheet dialogSheet = new DialogSheet(v.getContext());
+                            dialogSheet.setTitle("Add Subtitle Url")
+                                    .setMessage("")
+                                    .setColoredNavigationBar(true)
+                                    .setCancelable(true)
+                                    .setBackgroundColor(Color.WHITE) // Your custom background color
+                                    .setButtonsColorRes(R.color.colorAccent) // You can use dialogSheetAccent style attribute instead
+                                    .show();
+                            dialogSheet.setView(R.layout.add_subtitle_url);
                         }
                         return true;
                     }
